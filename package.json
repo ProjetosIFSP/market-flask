@@ -1,0 +1,27 @@
+{
+  "name": "market-flask",
+  "version": "1.0.0",
+  "description": "Este projeto tem como objetivo desenvolver um sistema para gerenciar as operações de uma entidade que lida com a venda de veículos, compras de clientes, e despesas relacionadas a prestadores de serviços. O sistema permitirá o cadastro de clientes, veículos, prestadores de serviço, além do registro de transações de compra e venda, e o controle de despesas.",
+  "homepage": "https://github.com/ProjetosIFSP/market-flask#readme",
+  "bugs": {
+    "url": "https://github.com/ProjetosIFSP/market-flask/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProjetosIFSP/market-flask.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.7",
+    "tailwindcss": "^4.1.7"
+  }
+}

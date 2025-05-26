@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>Clientes</h1>
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      id="search"
+      type="text"
+      class="form-control w-50"
+      placeholder="Buscar clientes..."
+      value="{{ search }}"
+    />
+    <button id="add-client" class="btn btn-primary">Adicionar Cliente</button>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Cidade</th>
+        <th>UF</th>
+        <th>CEP</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="client-table">
+      {% for cliente in clientes %}
+      <tr>
+        <td>{{ cliente.idcliente }}</td>
+        <td>{{ cliente.nome }}</td>
+        <td>{{ cliente.endereco }}</td>
+        <td>{{ cliente.cidade }}</td>
+        <td>{{ cliente.uf }}</td>
+        <td>{{ cliente.cep }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-sm edit-client"
+            data-id="{{ cliente.idcliente }}"
+          >
+            Editar
+          </button>
+          <button
+            class="btn btn-danger btn-sm delete-client"
+            data-id="{{ cliente.idcliente }}"
+          >
+            Deletar
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav>
+    <ul class="pagination">
+      {% for p in range(1, (total // 10) + 2) %}
+      <li class="page-item {% if p == page %}active{% endif %}">
+        <a class="page-link" href="?page={{ p }}&search={{ search }}"
+          >{{ p }}</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</div>
+<script>
+  const searchInput = document.getElementById('search')
+  const clientTable = document.getElementById('client-table')
+
+  searchInput.addEventListener('input', () => {
+    const params = new URLSearchParams(window.location.search)
+    params.set('search', searchInput.value)
+    params.set('page', 1)
+    history.pushState({}, '', `?${params.toString()}`)
+
+    fetch(`/clientes?${params.toString()}`)
+      .then((response) => response.text())
+      .then((html) => {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(html, 'text/html')
+        clientTable.innerHTML = doc.getElementById('client-table').innerHTML
+      })
+  })
+
+  document.getElementById('add-client').addEventListener('click', () => {
+    // Lógica para adicionar cliente
+  })
+
+  document.querySelectorAll('.edit-client').forEach((button) => {
+    button.addEventListener('click', () => {
+      const id = button.getAttribute('data-id')
+      // Lógica para editar cliente
+    })
+  })
+
+  document.querySelectorAll('.delete-client').forEach((button) => {
+    button.addEventListener('click', () => {
+      const id = button.getAttribute('data-id')
+      // Lógica para deletar cliente
+    })
+  })
+</script>
+{% endblock %}

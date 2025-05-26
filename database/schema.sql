@@ -1,4 +1,4 @@
-CREATE TABLE cliente (
+CREATE TABLE IF NOT EXISTS cliente (
     idcliente INT PRIMARY KEY,
     nome VARCHAR(60),
     endereco VARCHAR(255),
@@ -7,7 +7,7 @@ CREATE TABLE cliente (
     cep VARCHAR(9)
 );
 
-CREATE TABLE veiculo (
+CREATE TABLE IF NOT EXISTS veiculo (
     idplaca VARCHAR(9) PRIMARY KEY,
     ano INT,
     modelo INT,
@@ -19,7 +19,7 @@ CREATE TABLE veiculo (
     total_despesa DECIMAL(10,2)
 );
 
-CREATE TABLE venda (
+CREATE TABLE IF NOT EXISTS venda (
     idvenda INT PRIMARY KEY,
     data DATE,
     valor_vendido DECIMAL(10,2),
@@ -30,7 +30,7 @@ CREATE TABLE venda (
     FOREIGN KEY (idplaca) REFERENCES veiculo(idplaca)
 );
 
-CREATE TABLE compra (
+CREATE TABLE IF NOT EXISTS compra (
     idcompra INT PRIMARY KEY,
     idplaca VARCHAR(9),
     idcliente INT,
@@ -41,7 +41,7 @@ CREATE TABLE compra (
     FOREIGN KEY (idcliente) REFERENCES cliente(idcliente)
 );
 
-CREATE TABLE prestador (
+CREATE TABLE IF NOT EXISTS prestador (
     idprestador INT PRIMARY KEY,
     nome_empresa VARCHAR(60),
     cidade VARCHAR(80),
@@ -49,7 +49,7 @@ CREATE TABLE prestador (
     cep VARCHAR(9)
 );
 
-CREATE TABLE despesa (
+CREATE TABLE IF NOT EXISTS despesa (
     iddespesa INT PRIMARY KEY,
     idplaca VARCHAR(9),
     descricao VARCHAR(80),

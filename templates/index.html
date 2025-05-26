@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Feirão do Automóvel{% endblock %} {%
+block content_bg %}
+<div class="flex flex-col gap-2 flex-1">
+  <h3
+    class="w-max text-medium border-b h-6 border-white/60 after:content-[''] after:block after:w-0 after:h-[1px] after:bg-green-700 focus:after:w-full hover:after:w-full after:-translate-y-px after:transition-normal after:duration-500"
+  >
+    Feirão do Automóvel
+  </h3>
+  <h1 class="text-6xl font-bold">
+    Compre ou venda seu carro<br />com segurança
+  </h1>
+
+  <div class="mt-auto justify-center w-full">
+    <form class="max-w-md mx-auto">
+      <label
+        for="default-search"
+        class="mb-2 text-sm font-medium text-gray-900 sr-only"
+        >Search</label
+      >
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-2 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="search"
+          id="default-search"
+          style="font-family: 'Inter', sans-serif"
+          class="outline-none block w-full p-4 ps-12 text-sm text-zinc-950 border rounded-full bg-zinc-50 focus-ring"
+          placeholder="Encontre seu carro"
+        />
+        <button
+          type="submit"
+          class="text-zinc-50 cursor-pointer absolute end-2.5 bottom-2.5 bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-4 py-2"
+        >
+          Buscar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

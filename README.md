@@ -22,9 +22,38 @@ O diagrama entidade-relacionamento (DER) do banco de dados do projeto é o segui
 
 ## Tecnologias
 
-O trabalho
+O trabalho é desenvolvido em Flask, então necessita do Python para executá-lo, ademais, é utilizado o tailwind para geração de seu CSS, mas não é necessário instalar node, apenas se quiser mexer no projeto.
 
-## Como Contribuir
+## Como Executar
 
 1. Clone o projeto na sua máquina
 2. Instale as dependências com `npm install` e `pip install -r requirements.txt`
+3. Rode o projeto com `python3 app.py` ou `python app.py` dependendo da versão que possui do Python
+4. Caso queira mudar as classes do tailwind, rode: `npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch`
+
+## Como Configurar o Banco de Dados com Docker
+
+1. Certifique-se de que o Docker está instalado e em execução na sua máquina.
+2. Suba o container do PostgreSQL com o seguinte comando:
+
+```bash
+docker compose up -d
+```
+
+3. Copie o arquivo `schema.sql` para dentro do container:
+
+```bash
+docker cp database/schema.sql market-flask-pg-1:/schema.sql
+```
+
+4. Acesse o container e execute o script SQL para criar as tabelas:
+
+```bash
+docker exec -it market-flask-pg-1 psql -U docker -d market-flask -f /schema.sql
+```
+
+5. Após configurar o banco de dados, você pode executar o projeto normalmente com:
+
+```bash
+python3 app.py
+```
