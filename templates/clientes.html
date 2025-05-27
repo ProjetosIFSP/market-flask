@@ -8,7 +8,7 @@
       <form class="max-w-md mx-auto">
         <label
           for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only"
+          class="mb-2 text-sm font-medium text-zinc-900 sr-only"
           >Search</label
         >
         <div class="relative">
@@ -16,7 +16,7 @@
             class="absolute inset-y-0 start-2 flex items-center ps-3 pointer-events-none"
           >
             <svg
-              class="w-4 h-4 text-gray-500"
+              class="w-4 h-4 text-zinc-500"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -58,19 +58,20 @@
     <table class="w-full">
       <thead>
         <tr class="border-b border-zinc-950/10">
-          <th class="py-3 px-4 text-sm font-semibold text-left">
+          <th
+            class="py-3 px-4 text-sm font-semibold w-10 text-center translate-y-0.5"
+          >
             <input
               type="checkbox"
-              class="w-4 h-4 accent-green-600 text-green-600 bg-gray-100 border-gray-300 rounded-sm"
+              class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm"
             />
           </th>
-          <th class="py-3 px-4 text-sm font-semibold text-left">Código</th>
           <th class="py-3 px-4 text-sm font-semibold text-left">Nome</th>
           <th class="py-3 px-4 text-sm font-semibold text-left col-span-5">
             Endereço
           </th>
           <th class="py-3 px-4 text-sm font-semibold text-left">CEP</th>
-          <th class="py-3 px-4 text-sm font-semibold text-left"></th>
+          <th class="py-3 px-4 text-sm font-semibold text-left w-10"></th>
         </tr>
       </thead>
       <tbody>
@@ -78,24 +79,64 @@
           <td class="py-3 px-4 text-sm text-zinc-700">
             <input
               type="checkbox"
-              class="w-4 h-4 accent-green-600 text-green-600 bg-gray-100 border-gray-300 rounded-sm"
+              class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm translate-y-0.5"
             />
           </td>
-          <td class="py-3 px-4 text-sm text-zinc-700">1</td>
           <td class="py-3 px-4 text-sm text-zinc-700">Fulano Silva</td>
           <td class="py-3 px-4 text-sm text-zinc-700">
             Rua Um, Presidente Epitácio - SP
           </td>
           <td class="py-3 px-4 text-sm text-zinc-700">19470-000</td>
-          <td class="py-3 px-4 text-sm text-zinc-700">X</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            <div class="flex gap-1.5">
+              <a
+                href="?page=1&search={{ search }}"
+                type="button"
+                class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M14.236 1.764a2.62 2.62 0 0 0-3.707 0L2.657 9.636a2.96 2.96 0 0 0-.772 1.354l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772l7.872-7.872a2.62 2.62 0 0 0 0-3.707m-3 .707a1.621 1.621 0 1 1 2.293 2.293l-.779.779l-2.293-2.293zM9.75 3.957l2.293 2.293l-6.386 6.386a1.95 1.95 0 0 1-.896.51l-2.567.66l.66-2.567a1.94 1.94 0 0 1 .51-.896z"
+                  />
+                </svg>
+              </a>
+              <button
+                href="?page=1&search={{ search }}"
+                type="button"
+                class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 cursor-pointer transition-colors duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.564l-1.205 8.838A2.5 2.5 0 0 1 9.754 15H6.246a2.5 2.5 0 0 1-2.477-2.162L2.564 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5m-4.74 6.703A1.5 1.5 0 0 0 6.246 14h3.508a1.5 1.5 0 0 0 1.487-1.297L12.427 4H3.573z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </td>
         </tr>
       </tbody>
       <tfoot
         class="absolute w-full flex justify-between bottom-0 bg-zinc-50 border-t border-zinc-950/10"
       >
-        <tr class="flex w-full justify-between">
-          <td class="py-3 px-4 text-sm text-zinc-700 col-span-4" colspan="3">
-            Mostrando 10 de 223 itens
+        <tr class="flex w-full justify-between items-center">
+          <td
+            class="py-3 px-4 text-sm text-zinc-700 col-span-4 max-h-max"
+            colspan="3"
+          >
+            Mostrando <span class="font-semibold">10</span> de
+            <span class="font-semibold">223</span> itens
           </td>
 
           <td
@@ -103,7 +144,10 @@
             colspan="3"
           >
             <div class="inline-flex justify-center gap-8">
-              <span class="place-content-center"> Página 1 de 24 </span>
+              <span class="place-content-center">
+                Página <span class="font-semibold">1</span> de
+                <span class="font-semibold">24</span>
+              </span>
 
               <div class="flex gap-1.5 items-center">
                 <a
