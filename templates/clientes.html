@@ -1,66 +1,186 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
-  <h1>Clientes</h1>
-  <div class="d-flex justify-content-between mb-3">
-    <input
-      id="search"
-      type="text"
-      class="form-control w-50"
-      placeholder="Buscar clientes..."
-      value="{{ search }}"
-    />
-    <button id="add-client" class="btn btn-primary">Adicionar Cliente</button>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Endereço</th>
-        <th>Cidade</th>
-        <th>UF</th>
-        <th>CEP</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody id="client-table">
-      {% for cliente in clientes %}
-      <tr>
-        <td>{{ cliente.idcliente }}</td>
-        <td>{{ cliente.nome }}</td>
-        <td>{{ cliente.endereco }}</td>
-        <td>{{ cliente.cidade }}</td>
-        <td>{{ cliente.uf }}</td>
-        <td>{{ cliente.cep }}</td>
-        <td>
-          <button
-            class="btn btn-warning btn-sm edit-client"
-            data-id="{{ cliente.idcliente }}"
-          >
-            Editar
-          </button>
-          <button
-            class="btn btn-danger btn-sm delete-client"
-            data-id="{{ cliente.idcliente }}"
-          >
-            Deletar
-          </button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <nav>
-    <ul class="pagination">
-      {% for p in range(1, (total // 10) + 2) %}
-      <li class="page-item {% if p == page %}active{% endif %}">
-        <a class="page-link" href="?page={{ p }}&search={{ search }}"
-          >{{ p }}</a
+<div class="flex flex-col gap-4 flex-1">
+  <div class="flex gap-3 items-center">
+    <h1 class="text-2xl font-bold">Clientes</h1>
+    <div
+      class="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3"
+    >
+      <form class="max-w-md mx-auto">
+        <label
+          for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only"
+          >Search</label
         >
-      </li>
-      {% endfor %}
-    </ul>
-  </nav>
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 start-2 flex items-center ps-3 pointer-events-none"
+          >
+            <svg
+              class="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+
+          <input
+            type="search"
+            id="search"
+            style="font-family: 'Inter', sans-serif"
+            class="outline-none block w-full p-2 ps-12 text-sm text-zinc-950 rounded-full bg-zinc-300 focus-ring"
+            placeholder="Buscar cliente"
+            value="{{ search }}"
+          />
+        </div>
+      </form>
+    </div>
+    <a
+      type="button"
+      href="/clientes/novo"
+      class="text-zinc-50 ml-auto cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-full text-sm px-4 py-2"
+    >
+      Novo Cliente
+    </a>
+  </div>
+
+  <div
+    class="relative flex flex-col flex-1 border border-zinc-950/10 rounded-lg"
+  >
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-zinc-950/10">
+          <th class="py-3 px-4 text-sm font-semibold text-left">
+            <input
+              type="checkbox"
+              class="w-4 h-4 accent-green-600 text-green-600 bg-gray-100 border-gray-300 rounded-sm"
+            />
+          </th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Código</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Nome</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left col-span-5">
+            Endereço
+          </th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">CEP</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-white/10 hover:bg-white/5">
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            <input
+              type="checkbox"
+              class="w-4 h-4 accent-green-600 text-green-600 bg-gray-100 border-gray-300 rounded-sm"
+            />
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">1</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">Fulano Silva</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            Rua Um, Presidente Epitácio - SP
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">19470-000</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">X</td>
+        </tr>
+      </tbody>
+      <tfoot
+        class="absolute w-full flex justify-between bottom-0 bg-zinc-50 border-t border-zinc-950/10"
+      >
+        <tr class="flex w-full justify-between">
+          <td class="py-3 px-4 text-sm text-zinc-700 col-span-4" colspan="3">
+            Mostrando 10 de 223 itens
+          </td>
+
+          <td
+            class="py-3 px-4 text-sm text-zinc-700 col-span-2 text-right"
+            colspan="3"
+          >
+            <div class="inline-flex justify-center gap-8">
+              <span class="place-content-center"> Página 1 de 24 </span>
+
+              <div class="flex gap-1.5 items-center">
+                <a
+                  href="?page=1&search={{ search }}"
+                  type="button"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M8.354 12.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 1 1 .708.708L4.207 8zm4 0a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708.708L8.207 8z"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="?page={{ page - 1 }}&search={{ search }}"
+                  type="button"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M10.354 3.146a.5.5 0 0 1 0 .708L6.207 8l4.147 4.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708 0"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="?page=1&search={{ search }}"
+                  type="button"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M5.646 3.146a.5.5 0 0 0 0 .708L9.793 8l-4.147 4.146a.5.5 0 0 0 .708.708l4.5-4.5a.5.5 0 0 0 0-.708l-4.5-4.5a.5.5 0 0 0-.708 0"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="?page=1&search={{ search }}"
+                  type="button"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M7.646 3.854a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L11.793 8zm-4 0a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L7.793 8z"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
 <script>
   const searchInput = document.getElementById('search')
