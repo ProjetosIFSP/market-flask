@@ -5,7 +5,10 @@
     <div
       class="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3"
     >
-      <form class="max-w-md mx-auto">
+      <form
+        class="max-w-md mx-auto"
+        onsubmit="event.preventDefault(); const params = new URLSearchParams(window.location.search); params.set('search', document.getElementById('search').value); params.set('page', 1); window.location.href = `?${params.toString()}`;"
+      >
         <label
           for="default-search"
           class="mb-2 text-sm font-medium text-zinc-900 sr-only"
@@ -37,7 +40,7 @@
             id="search"
             style="font-family: 'Inter', sans-serif"
             class="outline-none block w-full p-2 ps-12 text-sm text-zinc-950 rounded-full bg-zinc-300 focus-ring"
-            placeholder="Buscar cliente"
+            placeholder="Buscar clientes"
             value="{{ search }}"
           />
         </div>
@@ -58,7 +61,8 @@
     {% if total <= 0 %}
     <div class="flex justify-center h-full items-center">
       <p class="text-lg italic font-medium text-zinc-400">
-        Não há clientes para serem exibidos
+        Não há clientes para serem exibidos {{'com esta pesquisa' if (search !=
+        '')}}
       </p>
     </div>
     {% else %}
@@ -165,7 +169,8 @@
                 <a
                   href="?page=1&search={{ search }}"
                   type="button"
-                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5
+                   {{ 'pointer-events-none !bg-zinc-100/50' if (page == 1) }}"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +187,8 @@
                 <a
                   href="?page={{ page - 1 }}&search={{ search }}"
                   type="button"
-                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5
+                   {{ 'pointer-events-none !bg-zinc-100/50' if (page == 1) }}"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +205,8 @@
                 <a
                   href="?page={{ page + 1 }}&search={{ search }}"
                   type="button"
-                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5
+                  {{ 'pointer-events-none !bg-zinc-100/50' if (page == max_pages) }}"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -214,9 +221,10 @@
                   </svg>
                 </a>
                 <a
-                  href="?page=1&search={{ search }}"
+                  href="?page={{ max_pages }}&search={{ search }}"
                   type="button"
-                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
+                  class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5
+                  {{ 'pointer-events-none !bg-zinc-100/50' if (page == max_pages) }}"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -248,32 +256,6 @@
     params.set('search', searchInput.value)
     params.set('page', 1)
     history.pushState({}, '', `?${params.toString()}`)
-
-    fetch(`/clientes?${params.toString()}`)
-      .then((response) => response.text())
-      .then((html) => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(html, 'text/html')
-        clientTable.innerHTML = doc.getElementById('client-table').innerHTML
-      })
-  })
-
-  document.getElementById('add-client').addEventListener('click', () => {
-    // Lógica para adicionar cliente
-  })
-
-  document.querySelectorAll('.edit-client').forEach((button) => {
-    button.addEventListener('click', () => {
-      const id = button.getAttribute('data-id')
-      // Lógica para editar cliente
-    })
-  })
-
-  document.querySelectorAll('.delete-client').forEach((button) => {
-    button.addEventListener('click', () => {
-      const id = button.getAttribute('data-id')
-      // Lógica para deletar cliente
-    })
   })
 </script>
 {% endblock %}

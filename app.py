@@ -27,12 +27,15 @@ def list_clients():
 
 
     if search:
-        query = query.filter(Cliente.nome.ilike(f"%{search}%"))
+        search_terms = search.split()
+        for term in search_terms:
+            query = query.filter(Cliente.nome.ilike(f"%{term}%"))
+    
+    total = query.count()
+    max_pages = math.ceil(total/10)
 
     clientes = query.offset((page - 1) * 10).limit(10).all()
-    total = db.session.query(Cliente).count()
-
-    max_pages = math.ceil(total/10)
+    
 
     return render_template('clientes.html', clientes=clientes, total=total, page=page, search=search, max_pages = max_pages)
 
