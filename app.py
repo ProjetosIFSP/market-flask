@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, jsonify
 from db_connection import init_app, db
 from models import Cliente
 import os
+import math
 
 app = Flask(__name__)
+
 
 # Inicializando o SQLAlchemy com o app Flask
 init_app(app)
@@ -14,17 +16,25 @@ def index():
 
 @app.route('/clientes', methods=['GET'])
 def list_clients():
-    page = int(request.args.get('page', 1))
-    search = request.args.get('search', '')
+    page = request.args['page'] if 'page' in request.args else 1
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+
+    search = request.args['search'] if 'search' in request.args else ''
     query = db.session.query(Cliente)
+
 
     if search:
         query = query.filter(Cliente.nome.ilike(f"%{search}%"))
 
     clientes = query.offset((page - 1) * 10).limit(10).all()
-    total = query.count()
+    total = db.session.query(Cliente).count()
 
-    return render_template('clientes.html', clientes=clientes, total=total, page=page, search=search)
+    max_pages = math.ceil(total/10)
+
+    return render_template('clientes.html', clientes=clientes, total=total, page=page, search=search, max_pages = max_pages)
 
 if __name__ == "__main__":
     with app.app_context():

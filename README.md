@@ -29,7 +29,11 @@ O trabalho é desenvolvido em Flask, então necessita do Python para executá-lo
 1. Clone o projeto na sua máquina
 2. Instale as dependências com `npm install` e `pip install -r requirements.txt`
 3. Rode o projeto com `python3 app.py` ou `python app.py` dependendo da versão que possui do Python
-4. Caso queira mudar as classes do tailwind, rode: `npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch`
+4. Caso queira mudar as classes do tailwind, rode:
+
+```bash
+npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch
+```
 
 ## Como Configurar o Banco de Dados com Docker
 

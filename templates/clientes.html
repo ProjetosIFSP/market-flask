@@ -55,6 +55,13 @@
   <div
     class="relative flex flex-col flex-1 border border-zinc-950/10 rounded-lg"
   >
+    {% if total <= 0 %}
+    <div class="flex justify-center h-full items-center">
+      <p class="text-lg italic font-medium text-zinc-400">
+        Não há clientes para serem exibidos
+      </p>
+    </div>
+    {% else %}
     <table class="w-full">
       <thead>
         <tr class="border-b border-zinc-950/10">
@@ -75,6 +82,7 @@
         </tr>
       </thead>
       <tbody>
+        {% for cliente in clientes %}
         <tr class="border-b border-white/10 hover:bg-white/5">
           <td class="py-3 px-4 text-sm text-zinc-700">
             <input
@@ -82,15 +90,15 @@
               class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm translate-y-0.5"
             />
           </td>
-          <td class="py-3 px-4 text-sm text-zinc-700">Fulano Silva</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">{{ cliente.nome }}</td>
           <td class="py-3 px-4 text-sm text-zinc-700">
-            Rua Um, Presidente Epitácio - SP
+            {{ cliente.endereco }}, {{ cliente.cidade }} - {{ cliente.uf }}
           </td>
-          <td class="py-3 px-4 text-sm text-zinc-700">19470-000</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">{{ cliente.cep }}</td>
           <td class="py-3 px-4 text-sm text-zinc-700">
             <div class="flex gap-1.5">
               <a
-                href="?page=1&search={{ search }}"
+                href="/clientes/edit/{{cliente.idcliente}}"
                 type="button"
                 class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300"
               >
@@ -126,6 +134,7 @@
             </div>
           </td>
         </tr>
+        {% endfor %}
       </tbody>
       <tfoot
         class="absolute w-full flex justify-between bottom-0 bg-zinc-50 border-t border-zinc-950/10"
@@ -135,8 +144,11 @@
             class="py-3 px-4 text-sm text-zinc-700 col-span-4 max-h-max"
             colspan="3"
           >
-            Mostrando <span class="font-semibold">10</span> de
-            <span class="font-semibold">223</span> itens
+            Mostrando
+            <span class="font-semibold"
+              >{{(total - 10 * (page - 1)) % 10 }}</span
+            >
+            de <span class="font-semibold">{{ total }}</span> itens
           </td>
 
           <td
@@ -145,8 +157,8 @@
           >
             <div class="inline-flex justify-center gap-8">
               <span class="place-content-center">
-                Página <span class="font-semibold">1</span> de
-                <span class="font-semibold">24</span>
+                Página <span class="font-semibold"> {{ page }} </span> de
+                <span class="font-semibold">{{ max_pages }}</span>
               </span>
 
               <div class="flex gap-1.5 items-center">
@@ -185,7 +197,7 @@
                   </svg>
                 </a>
                 <a
-                  href="?page=1&search={{ search }}"
+                  href="?page={{ page + 1 }}&search={{ search }}"
                   type="button"
                   class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5"
                 >
@@ -224,6 +236,7 @@
         </tr>
       </tfoot>
     </table>
+    {% endif %}
   </div>
 </div>
 <script>
