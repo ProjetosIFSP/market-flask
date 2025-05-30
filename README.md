@@ -61,3 +61,9 @@ docker exec -it market-flask-pg-1 psql -U docker -d market-flask -f /schema.sql
 ```bash
 python3 app.py
 ```
+
+6. Para conectar ao banco via docker:
+
+```bash
+docker exec -it market-flask-pg-1 psql -U docker -d market-flask
+```
