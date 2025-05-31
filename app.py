@@ -1,9 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template
 from db_connection import init_app, db
-from models import Cliente, Venda, Compra, Veiculo
-from rotas.clientes import clientes_bp
-from rotas.veiculos import veiculos_bp
-import math
+from routes.clientes import clientes_bp
+from routes.veiculos import veiculos_bp
 
 app = Flask(__name__)
 
