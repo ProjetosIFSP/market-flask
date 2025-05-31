@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex flex-col gap-4 flex-1">
+  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <form
+    method="POST"
+    action="{{ action }}"
+    class="flex flex-col gap-4 border border-zinc-950/10 rounded-lg p-4"
+  >
+    <div class="flex flex-col gap-2">
+      <label for="idplaca" class="text-sm font-medium">Placa</label>
+      <input
+        type="text"
+        id="idplaca"
+        name="idplaca"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.idplaca if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="ano" class="text-sm font-medium">Ano</label>
+      <input
+        type="number"
+        id="ano"
+        name="ano"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.ano if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="modelo" class="text-sm font-medium">Modelo</label>
+      <input
+        type="number"
+        id="modelo"
+        name="modelo"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.modelo if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="fabricante" class="text-sm font-medium">Fabricante</label>
+      <input
+        type="text"
+        id="fabricante"
+        name="fabricante"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.fabricante if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="modelo_veiculo" class="text-sm font-medium"
+        >Modelo Veículo</label
+      >
+      <input
+        type="text"
+        id="modelo_veiculo"
+        name="modelo_veiculo"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.modelo_veiculo if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="cor" class="text-sm font-medium">Cor</label>
+      <input
+        type="text"
+        id="cor"
+        name="cor"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.cor if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="preco_fipe" class="text-sm font-medium">Preço FIPE</label>
+      <input
+        type="number"
+        step="0.01"
+        id="preco_fipe"
+        name="preco_fipe"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.preco_fipe if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="preco_venda" class="text-sm font-medium">Preço Venda</label>
+      <input
+        type="number"
+        step="0.01"
+        id="preco_venda"
+        name="preco_venda"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.preco_venda if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="total_despesa" class="text-sm font-medium"
+        >Total Despesa</label
+      >
+      <input
+        type="number"
+        step="0.01"
+        id="total_despesa"
+        name="total_despesa"
+        class="block w-full p-2 text-sm text-zinc-950 rounded-lg bg-zinc-50 border border-zinc-300 focus:ring-green-500 focus:border-green-500"
+        value="{{ veiculo.total_despesa if veiculo else '' }}"
+        required
+      />
+    </div>
+
+    <div class="flex gap-4">
+      <button
+        type="button"
+        onclick="window.history.back()"
+        class="text-zinc-950 cursor-pointer bg-zinc-300 hover:bg-zinc-200 focus:ring-4 focus:outline-none focus:ring-zinc-300/30 font-medium rounded-lg text-sm px-4 py-2"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="text-zinc-50 cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-lg text-sm px-4 py-2"
+      >
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

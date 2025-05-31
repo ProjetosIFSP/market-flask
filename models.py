@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String, DECIMAL
 
 db = SQLAlchemy()
 
@@ -16,15 +17,15 @@ class Cliente(db.Model):
 class Veiculo(db.Model):
     __tablename__ = 'veiculo'
 
-    idplaca = db.Column(db.String(9), primary_key=True)
-    ano = db.Column(db.Integer)
-    modelo = db.Column(db.Integer)
-    preco_fipe = db.Column(db.DECIMAL(10, 2))
-    fabricante = db.Column(db.String(50))
-    modelo_veiculo = db.Column(db.String(60))
-    cor = db.Column(db.String(20))
-    preco_venda = db.Column(db.DECIMAL(10, 2))
-    total_despesa = db.Column(db.DECIMAL(10, 2))
+    idplaca = Column(String(9), primary_key=True)
+    ano = Column(Integer, nullable=False)
+    modelo = Column(Integer, nullable=False)
+    preco_fipe = Column(DECIMAL(10, 2))
+    fabricante = Column(String(50))
+    modelo_veiculo = Column(String(60))
+    cor = Column(String(20))
+    preco_venda = Column(DECIMAL(10, 2))
+    total_despesa = Column(DECIMAL(10, 2))
 
 class Venda(db.Model):
     __tablename__ = 'venda'

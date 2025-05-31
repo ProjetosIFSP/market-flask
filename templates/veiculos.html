@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <div class="flex flex-col gap-4 flex-1">
   <div class="flex gap-3 items-center">
-    <h1 class="text-2xl font-bold">Clientes</h1>
+    <h1 class="text-2xl font-bold">Veículos</h1>
     <div
       class="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3"
     >
@@ -40,7 +40,7 @@
             id="search"
             style="font-family: 'Inter', sans-serif"
             class="block w-full p-2 ps-12 text-sm text-zinc-950 rounded-full bg-zinc-50 focus-ring border border-zinc-300 focus:ring-green-500 focus:border-green-500 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:text-zinc-950 [&::-webkit-search-cancel-button]:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8bGluZSB4MT0iMyIgeTE9IjMiIHgyPSIxMyIgeTI9IjEzIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMTMiIHkxPSIzIiB4Mj0iMyIgeTI9IjEzIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjEiLz4KPC9zdmc+')] [&::-webkit-search-cancel-button]:bg-no-repeat [&::-webkit-search-cancel-button]:bg-center [&::-webkit-search-cancel-button]:bg-contain [&::-webkit-search-cancel-button]:cursor-pointer [&::-webkit-search-cancel-button]:hover:bg-zinc-200 [&::-webkit-search-cancel-button]:active:bg-zinc-300 [&::-webkit-search-cancel-button]:w-4 [&::-webkit-search-cancel-button]:h-4"
-            placeholder="Buscar clientes"
+            placeholder="Buscar veículos"
             value="{{ search }}"
           />
         </div>
@@ -49,7 +49,7 @@
     <div class="flex justify-end py-2">
       <button
         id="deleteSelectedButton"
-        onclick="deleteSelectedClients()"
+        onclick="deleteSelectedVehicles()"
         class="focus:ring-4 focus:outline-none focus:ring-red-600/30 bg-red-600 hover:bg-red-500 text-sm text-white py-1.5 px-4 rounded-full cursor-pointer hidden"
       >
         Excluir Selecionados
@@ -65,10 +65,10 @@
     {% endif %} {% endwith %}
     <a
       type="button"
-      href="/clientes/novo"
+      href="/veiculos/novo"
       class="text-zinc-50 ml-auto cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-full text-sm px-4 py-2"
     >
-      Novo Cliente
+      Novo Veículo
     </a>
   </div>
 
@@ -78,12 +78,12 @@
     {% if total <= 0 %}
     <div class="flex justify-center h-full flex-1 items-center">
       <p class="text-lg italic font-medium text-zinc-400">
-        Não há clientes para serem exibidos {{'com esta pesquisa' if (search !=
+        Não há veículos para serem exibidos {{'com esta pesquisa' if (search !=
         '')}}
       </p>
     </div>
     {% else %}
-    <table class="w-full" id="client-table">
+    <table class="w-full" id="vehicle-table">
       <thead>
         <tr class="border-b border-zinc-950/10">
           <th
@@ -94,19 +94,26 @@
               class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm"
             />
           </th>
-          <th class="py-3 px-4 text-sm font-semibold text-left">Nome</th>
-          <th class="py-3 px-4 text-sm font-semibold text-left col-span-5">
-            Endereço
+          <th class="py-3 px-4 text-sm font-semibold text-left">Placa</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Ano/Modelo</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Fabricante</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">
+            Modelo Veículo
           </th>
-          <th class="py-3 px-4 text-sm font-semibold text-left">CEP</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Cor</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Preço FIPE</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">Preço Venda</th>
+          <th class="py-3 px-4 text-sm font-semibold text-left">
+            Total Despesa
+          </th>
           <th class="py-3 px-4 text-sm font-semibold text-left w-10"></th>
         </tr>
       </thead>
       <tbody>
-        {% for cliente in clientes %}
+        {% for veiculo in veiculos %}
         <tr
           class="border-b border-white/10 hover:bg-white/5"
-          data-id="{{ cliente.idcliente }}"
+          data-id="{{ veiculo.idplaca }}"
         >
           <td class="py-3 px-4 text-sm text-zinc-700">
             <input
@@ -114,15 +121,30 @@
               class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm translate-y-0.5"
             />
           </td>
-          <td class="py-3 px-4 text-sm text-zinc-700">{{ cliente.nome }}</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">{{ veiculo.idplaca }}</td>
           <td class="py-3 px-4 text-sm text-zinc-700">
-            {{ cliente.endereco }}, {{ cliente.cidade }} - {{ cliente.uf }}
+            {{ veiculo.ano }}/{{ veiculo.modelo }}
           </td>
-          <td class="py-3 px-4 text-sm text-zinc-700">{{ cliente.cep }}</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            {{ veiculo.fabricante }}
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            {{ veiculo.modelo_veiculo }}
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">{{ veiculo.cor }}</td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            {{ veiculo.preco_fipe }}
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            {{ veiculo.preco_venda }}
+          </td>
+          <td class="py-3 px-4 text-sm text-zinc-700">
+            {{ veiculo.total_despesa }}
+          </td>
           <td class="py-3 px-4 text-sm text-zinc-700">
             <div class="flex gap-1.5">
               <a
-                href="/clientes/edit/{{cliente.idcliente}}"
+                href="/veiculos/edit/{{veiculo.idplaca}}"
                 type="button"
                 class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300"
               >
@@ -140,7 +162,7 @@
               </a>
 
               <form
-                action="{{ url_for('clientes.delete_cliente', idcliente=cliente.idcliente) }}"
+                action="{{ url_for('veiculos.delete_veiculo', idplaca=veiculo.idplaca) }}"
                 method="post"
                 onsubmit="return confirm('Tem certeza que deseja apagar?');"
               >
@@ -278,7 +300,7 @@
 >
   <div class="bg-white p-6 rounded-lg shadow-lg">
     <h2 class="text-lg font-bold mb-4">Confirmar Exclusão</h2>
-    <p class="mb-4">Tem certeza de que deseja excluir este cliente?</p>
+    <p class="mb-4">Tem certeza de que deseja excluir este veículo?</p>
     <form id="deleteForm" method="POST">
       <button
         type="button"
@@ -299,7 +321,7 @@
 
 <script>
   const searchInput = document.getElementById('search')
-  const clientTable = document.getElementById('client-table')
+  const vehicleTable = document.getElementById('vehicle-table')
 
   searchInput.addEventListener('input', () => {
     const params = new URLSearchParams(window.location.search)
@@ -350,16 +372,16 @@
     deleteSelectedButton.style.display = anySelected ? 'block' : 'none'
   }
 
-  function deleteSelectedClients() {
+  function deleteSelectedVehicles() {
     const selectedIds = Array.from(rowCheckboxes)
       .filter((checkbox) => checkbox.checked)
       .map((checkbox) => checkbox.closest('tr').dataset.id)
 
     if (
       selectedIds.length > 0 &&
-      confirm('Tem certeza que deseja apagar os clientes selecionados?')
+      confirm('Tem certeza que deseja apagar os veículos selecionados?')
     ) {
-      fetch('/clientes/delete-multiple', {
+      fetch('/veiculos/delete-multiple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -369,7 +391,7 @@
         if (response.ok) {
           window.location.reload()
         } else {
-          alert('Erro ao deletar clientes selecionados.')
+          alert('Erro ao deletar veículos selecionados.')
         }
       })
     }
