@@ -2,11 +2,13 @@
 
 Este projeto tem como objetivo desenvolver um sistema para gerenciar as operações de uma entidade que lida com a venda de veículos, compras de clientes, e despesas relacionadas a prestadores de serviços. O sistema permitirá o cadastro de clientes, veículos, prestadores de serviço, além do registro de transações de compra e venda, e o controle de despesas.
 
-É um projeto destinado à disciplina de
+É um projeto destinado à disciplina de tópicos de programação (TPRC0)
+
+![Página de índice](docs/index.png)
 
 ## Diagrama do Banco de Dados
 
-O diagrama entidade-relacionamento (DER) do banco de dados do projeto é o seguinte:
+O diagrama do banco de dados do projeto fornecido:
 
 ![Diagrama do Banco de Dados](docs/bd.png)
 
@@ -22,14 +24,15 @@ O diagrama entidade-relacionamento (DER) do banco de dados do projeto é o segui
 
 ## Tecnologias
 
-O trabalho é desenvolvido em Flask, então necessita do Python para executá-lo, ademais, é utilizado o tailwind para geração de seu CSS, mas não é necessário instalar node, apenas se quiser mexer no projeto.
+O trabalho é desenvolvido em Flask, então necessita do Python para executá-lo, ademais, é utilizado Tailwind para geração de seu CSS, mas não é necessário instalar node, apenas se quiser mexer no projeto.
 
 ## Como Executar
 
 1. Clone o projeto na sua máquina
 2. Instale as dependências com `npm install` e `pip install -r requirements.txt`
-3. Rode o projeto com `python3 app.py` ou `python app.py` dependendo da versão que possui do Python
-4. Caso queira mudar as classes do tailwind, rode:
+3. Verifique a URL do servidor em `db_connection.py`
+4. Rode o projeto com `python3 app.py` ou `python app.py` dependendo da versão que possui do Python
+5. Caso queira mudar as classes do Tailwind, rode:
 
 ```bash
 npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch
