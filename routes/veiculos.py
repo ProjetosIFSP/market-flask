@@ -6,45 +6,40 @@ import math
 veiculos_bp = Blueprint('veiculos', __name__)
 
 @veiculos_bp.route('/veiculos', methods=['GET', 'POST'])
-def list_veiculos():
+def list_veiculos2():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
-
-        query = db.session.query(Veiculo).order_by(Veiculo.fabricante.asc())
-        if search:
-            search_terms = search.split()
-            for term in search_terms:
-                query = query.filter(Veiculo.fabricante.ilike(f"%{term}%"))
-
-        total = query.count()
-        max_pages = math.ceil(total / 10)
-        showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
-        veiculos = query.offset((int(page) - 1) * 10).limit(10).all()
-
-        return render_template('veiculos.html', veiculos=veiculos, total=total, page=int(page), search=search, max_pages=max_pages, showing=showing)
-
-    page = request.args['page'] if 'page' in request.args else 1
+    else:
+        page = request.args.get('page', 1)
+        search = request.args.get('search', '')
+        
     try:
         page = int(page)
     except ValueError:
         page = 1
 
     search = request.args['search'] if 'search' in request.args else ''
-    query = db.session.query(Veiculo)
-    query = query.order_by(Veiculo.fabricante.asc())
+    query = db.session.query(Veiculo).order_by(Veiculo.fabricante.asc())
 
     if search:
         search_terms = search.split()
         for term in search_terms:
-            query = query.filter(Veiculo.fabricante.ilike(f"%{term}%"))
+            query = query.filter(
+                Veiculo.fabricante.ilike(f"%{term}%") |
+                Veiculo.modelo_veiculo.ilike(f"%{term}%") |
+                Veiculo.idplaca.ilike(f"%{term}%")
+            )
 
     total = query.count()
     max_pages = math.ceil(total / 10)
+    page = int(page)
     showing = 10 if page < max_pages else (total - 10 * (page - 1)) % 10
-    veiculos = query.offset((page - 1) * 10).limit(10).all()
+    array = query.offset((page - 1) * 10).limit(10).all()
 
-    return render_template('veiculos.html', veiculos=veiculos, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
+    return render_template('veiculos.html',
+                            title='Veículos', context='veiculos',
+                            array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
 @veiculos_bp.route('/veiculos/novo', methods=['GET', 'POST'])
 def novo_veiculo():
@@ -76,7 +71,7 @@ def novo_veiculo():
         flash('Veículo cadastrado com sucesso!', 'success')
         return redirect(url_for('veiculos.list_veiculos'))
 
-    return render_template('form_veiculo.html', titulo='Novo veículo', action=url_for('novo_veiculo'))
+    return render_template('form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.novo_veiculo'))
 
 @veiculos_bp.route('/veiculos/edit/<string:idplaca>', methods=['GET', 'POST'])
 def edit_veiculo(idplaca):
@@ -99,7 +94,7 @@ def edit_veiculo(idplaca):
         flash('Veículo atualizado com sucesso!', 'success')
         return redirect(url_for('veiculos.list_veiculos'))
 
-    return render_template('form_veiculo.html', titulo='Alterando veículo', action=url_for('edit_veiculo', idplaca=idplaca), veiculo=veiculo)
+    return render_template('form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit_veiculo', idplaca=idplaca), veiculo=veiculo)
 
 @veiculos_bp.route('/veiculos/delete/<string:idplaca>', methods=['POST'])
 def delete_veiculo(idplaca):

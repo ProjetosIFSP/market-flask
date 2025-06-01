@@ -3,6 +3,7 @@ from db_connection import init_app, db
 from routes.clientes import clientes_bp
 from routes.veiculos import veiculos_bp
 from routes.prestadores import prestadores_bp
+from routes.servicos import despesas_bp
 
 app = Flask(__name__)
 
@@ -14,6 +15,7 @@ init_app(app)
 app.register_blueprint(clientes_bp)
 app.register_blueprint(veiculos_bp)
 app.register_blueprint(prestadores_bp)
+app.register_blueprint(despesas_bp)
 
 @app.route('/')
 def index():

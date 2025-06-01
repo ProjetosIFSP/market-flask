@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col gap-4 flex-1">
+  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <form action="{{ action }}" method="POST" class="flex flex-col gap-4">
+    <input type="hidden" id="iddespesa" name="iddespesa" value="{{ despesa.iddespesa if despesa else '' }}" />
+    <div class="flex flex-col">
+      <label for="descricao" class="text-sm font-medium">Descrição</label>
+      <input
+        type="text"
+        id="descricao"
+        name="descricao"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Digite a descrição do serviço"
+        value="{{ despesa.descricao if despesa else '' }}"
+        required
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="data_servico" class="text-sm font-medium">Data do Serviço</label>
+      <input
+        type="date"
+        id="data_servico"
+        name="data_servico"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        value="{{ despesa.data_servico if despesa else '' }}"
+        required
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="valor" class="text-sm font-medium">Valor</label>
+      <input
+        type="number"
+        step="0.01"
+        id="valor"
+        name="valor"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Digite o valor"
+        value="{{ despesa.valor if despesa else '' }}"
+        required
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="idplaca" class="text-sm font-medium">Placa do Veículo</label>
+      <select
+        id="idplaca"
+        name="idplaca"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        required
+      >
+        <option value="" selected>Selecione a placa</option>
+        {% for veiculo in veiculos %}
+        <option value="{{ veiculo.idplaca }}" {% if despesa and despesa.idplaca == veiculo.idplaca %}selected{% endif %}>{{ veiculo.idplaca }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex flex-col">
+      <label for="idprestador" class="text-sm font-medium">Prestador</label>
+      <select
+        id="idprestador"
+        name="idprestador"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        required
+      >
+        <option value="" selected>Selecione o prestador</option>
+        {% for prestador in prestadores %}
+        <option value="{{ prestador.idprestador }}" {% if despesa and despesa.idprestador == prestador.idprestador %}selected{% endif %}>{{ prestador.nome_empresa }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg">Salvar</button>
+  </form>
+</div>
+{% endblock %}

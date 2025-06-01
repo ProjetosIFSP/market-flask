@@ -10,22 +10,10 @@ def list_prestadores():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
+    else:
+      page = request.args.get('page', 1)
+      search = request.args.get('search', '')
 
-        query = db.session.query(Prestador).order_by(Prestador.nome_empresa.asc())
-        if search:
-            search_terms = search.split()
-            for term in search_terms:
-                query = query.filter(Prestador.nome_empresa.ilike(f"%{term}%"))
-
-        total = query.count()
-        max_pages = math.ceil(total / 10)
-        showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
-        prestadores = query.offset((int(page) - 1) * 10).limit(10).all()
-
-        return render_template('prestadores.html', prestadores=prestadores, total=total, page=int(page), search=search, max_pages=max_pages, showing=showing)
-
-    page = request.args.get('page', 1)
-    search = request.args.get('search', '')
     query = db.session.query(Prestador).order_by(Prestador.nome_empresa.asc())
 
     if search:
@@ -36,9 +24,11 @@ def list_prestadores():
     total = query.count()
     max_pages = math.ceil(total / 10)
     showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
-    prestadores = query.offset((int(page) - 1) * 10).limit(10).all()
+    array = query.offset((int(page) - 1) * 10).limit(10).all()
 
-    return render_template('prestadores.html', prestadores=prestadores, total=total, page=int(page), search=search, max_pages=max_pages, showing=showing)
+    return render_template('prestadores.html',
+                            title='Prestadores', context='prestadores',
+                            array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
 @prestadores_bp.route('/prestadores/novo', methods=['GET', 'POST'])
 def novo_prestador():

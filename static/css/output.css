@@ -252,6 +252,9 @@
   .bottom-2\.5 {
     bottom: calc(var(--spacing) * 2.5);
   }
+  .-z-10 {
+    z-index: calc(10 * -1);
+  }
   .col-span-2 {
     grid-column: span 2 / span 2;
   }

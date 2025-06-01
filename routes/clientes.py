@@ -10,29 +10,17 @@ def list_clients():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
-
-        query = db.session.query(Cliente).order_by(Cliente.nome.asc())
-        if search:
-            search_terms = search.split()
-            for term in search_terms:
-                query = query.filter(Cliente.nome.ilike(f"%{term}%"))
-
-        total = query.count()
-        max_pages = math.ceil(total / 10)
-        showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
-        clientes = query.offset((int(page) - 1) * 10).limit(10).all()
-
-        return render_template('clientes.html', clientes=clientes, total=total, page=int(page), search=search, max_pages=max_pages, showing=showing)
-
-    page = request.args['page'] if 'page' in request.args else 1
+    else:
+        page = request.args.get('page', 1)
+        search = request.args.get('search', '')
+        
     try:
         page = int(page)
     except ValueError:
         page = 1
 
     search = request.args['search'] if 'search' in request.args else ''
-    query = db.session.query(Cliente)
-    query = query.order_by(Cliente.nome.asc())
+    query = db.session.query(Cliente).order_by(Cliente.nome.asc())
 
     if search:
         search_terms = search.split()
@@ -40,11 +28,15 @@ def list_clients():
             query = query.filter(Cliente.nome.ilike(f"%{term}%"))
 
     total = query.count()
-    max_pages = math.ceil(total/10)
+    max_pages = math.ceil(total / 10)
+    page = int(page)
     showing = 10 if page < max_pages else (total - 10 * (page - 1)) % 10
-    clientes = query.offset((page - 1) * 10).limit(10).all()
+    array = query.offset((page - 1) * 10).limit(10).all()
 
-    return render_template('clientes.html', clientes=clientes, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
+    return render_template('clientes.html',
+                            title='Clientes', context='clientes',
+                            array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
+
 
 @clientes_bp.route('/clientes/novo', methods=['GET', 'POST'])
 def novo_cliente():
