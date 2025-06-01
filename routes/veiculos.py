@@ -3,24 +3,24 @@ from db_connection import db
 from models import Veiculo
 import math
 
-veiculos_bp = Blueprint('veiculos', __name__)
+veiculos_bp = Blueprint('veiculos', __name__, url_prefix='/veiculos')
 
-@veiculos_bp.route('/veiculos', methods=['GET', 'POST'])
-def list_veiculos2():
+@veiculos_bp.route('/', methods=['GET', 'POST'])
+def list_veiculos():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
     else:
         page = request.args.get('page', 1)
         search = request.args.get('search', '')
-        
+
     try:
         page = int(page)
     except ValueError:
         page = 1
 
     search = request.args['search'] if 'search' in request.args else ''
-    query = db.session.query(Veiculo).order_by(Veiculo.fabricante.asc())
+    query = db.session.query(Veiculo)
 
     if search:
         search_terms = search.split()
@@ -37,11 +37,11 @@ def list_veiculos2():
     showing = 10 if page < max_pages else (total - 10 * (page - 1)) % 10
     array = query.offset((page - 1) * 10).limit(10).all()
 
-    return render_template('veiculos.html',
+    return render_template('veiculos/veiculos.html',
                             title='Veículos', context='veiculos',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
-@veiculos_bp.route('/veiculos/novo', methods=['GET', 'POST'])
+@veiculos_bp.route('/novo', methods=['GET', 'POST'])
 def novo_veiculo():
     if request.method == 'POST':
         idplaca = request.form['idplaca']
@@ -71,9 +71,9 @@ def novo_veiculo():
         flash('Veículo cadastrado com sucesso!', 'success')
         return redirect(url_for('veiculos.list_veiculos'))
 
-    return render_template('form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.novo_veiculo'))
+    return render_template('veiculos/form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.novo_veiculo'))
 
-@veiculos_bp.route('/veiculos/edit/<string:idplaca>', methods=['GET', 'POST'])
+@veiculos_bp.route('/edit/<string:idplaca>', methods=['GET', 'POST'])
 def edit_veiculo(idplaca):
     veiculo = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
     if not veiculo:
@@ -94,9 +94,9 @@ def edit_veiculo(idplaca):
         flash('Veículo atualizado com sucesso!', 'success')
         return redirect(url_for('veiculos.list_veiculos'))
 
-    return render_template('form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit_veiculo', idplaca=idplaca), veiculo=veiculo)
+    return render_template('veiculos/form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit_veiculo', idplaca=idplaca), veiculo=veiculo)
 
-@veiculos_bp.route('/veiculos/delete/<string:idplaca>', methods=['POST'])
+@veiculos_bp.route('/delete/<string:idplaca>', methods=['POST'])
 def delete_veiculo(idplaca):
     veiculo = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
 
@@ -110,5 +110,43 @@ def delete_veiculo(idplaca):
         flash('Veículo excluído com sucesso!', 'success')
     except Exception:
         flash('Erro ao excluir veículo. Tente novamente.', 'error')
+
+    return redirect(url_for('veiculos.list_veiculos'))
+
+@veiculos_bp.route('/delete-multiple', methods=['POST'])
+def delete_multiple():
+    data = request.get_json()
+    ids_to_delete = data.get('ids', [])
+
+    print(f"IDs: {ids_to_delete}")
+
+    if not ids_to_delete:
+        flash('Nenhum veículo selecionado para exclusão.', 'error')
+        return redirect(url_for('veiculos.list_veiculos'))
+
+    failed_deletions = []
+
+    for idplaca in ids_to_delete:
+        try:
+            result = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
+
+            if not result:
+                failed_deletions.append(f'Veículo com placa {idplaca} não encontrado.')
+                continue
+            db.session.delete(result)
+
+        except Exception as e:
+            failed_deletions.append(f'Erro ao excluir veículo com ID {idplaca}: {str(e)}')
+
+    try:
+        db.session.commit()
+    except Exception:
+        flash('Erro ao realizar exclusão em massa. Tente novamente.', 'error')
+        return redirect(url_for('veiculos.list_veiculos'))
+
+    if failed_deletions:
+        flash('Alguns veículos não puderam ser excluídos: ' + ', '.join(failed_deletions), 'error')
+    else:
+        flash('Veículos excluídos com sucesso!', 'success')
 
     return redirect(url_for('veiculos.list_veiculos'))

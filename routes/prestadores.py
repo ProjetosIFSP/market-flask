@@ -3,9 +3,9 @@ from db_connection import db
 from models import Prestador
 import math
 
-prestadores_bp = Blueprint('prestadores', __name__)
+prestadores_bp = Blueprint('prestadores', __name__, url_prefix='/prestadores')
 
-@prestadores_bp.route('/prestadores', methods=['GET', 'POST'])
+@prestadores_bp.route('/', methods=['GET', 'POST'])
 def list_prestadores():
     if request.method == 'POST':
         page = request.form.get('page', 1)
@@ -26,11 +26,11 @@ def list_prestadores():
     showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
     array = query.offset((int(page) - 1) * 10).limit(10).all()
 
-    return render_template('prestadores.html',
+    return render_template('prestadores/prestadores.html',
                             title='Prestadores', context='prestadores',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
-@prestadores_bp.route('/prestadores/novo', methods=['GET', 'POST'])
+@prestadores_bp.route('/novo', methods=['GET', 'POST'])
 def novo_prestador():
     if request.method == 'POST':
         nome_empresa = request.form['nome_empresa']
@@ -49,9 +49,9 @@ def novo_prestador():
         return redirect(url_for('prestadores.list_prestadores'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('form_prestador.html', estados=estados, titulo='Novo prestador', action=url_for('prestadores.novo_prestador'))
+    return render_template('prestadores/form_prestador.html', estados=estados, titulo='Novo prestador', action=url_for('prestadores.novo_prestador'))
 
-@prestadores_bp.route('/prestadores/edit/<int:idprestador>', methods=['GET', 'POST'])
+@prestadores_bp.route('/edit/<int:idprestador>', methods=['GET', 'POST'])
 def edit_prestador(idprestador):
     prestador = db.session.query(Prestador).filter_by(idprestador=idprestador).first()
     if not prestador:
@@ -69,9 +69,9 @@ def edit_prestador(idprestador):
         return redirect(url_for('prestadores.list_prestadores'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('form_prestador.html', titulo='Alterando prestador', action=url_for('prestadores.edit_prestador', idprestador=idprestador), prestador=prestador, estados=estados)
+    return render_template('prestadores/form_prestador.html', titulo='Alterando prestador', action=url_for('prestadores.edit_prestador', idprestador=idprestador), prestador=prestador, estados=estados)
 
-@prestadores_bp.route('/prestadores/delete/<int:idprestador>', methods=['POST'])
+@prestadores_bp.route('/delete/<int:idprestador>', methods=['POST'])
 def delete_prestador(idprestador):
     prestador = db.session.query(Prestador).filter_by(idprestador=idprestador).first()
 
@@ -84,10 +84,14 @@ def delete_prestador(idprestador):
     flash('Prestador excluído com sucesso!', 'success')
     return redirect(url_for('prestadores.list_prestadores'))
 
-@prestadores_bp.route('/prestadores/delete-multiple', methods=['POST'])
+@prestadores_bp.route('/delete-multiple', methods=['POST'])
 def delete_multiple_prestadores():
+    print("Iniciando exclusão em massa de prestadores")
+
     data = request.get_json()
     ids_to_delete = data.get('ids', [])
+
+    print(f"IDs recebidos para exclusão: {ids_to_delete}")
 
     if not ids_to_delete:
         flash('Nenhum prestador selecionado para exclusão.', 'error')
@@ -98,7 +102,7 @@ def delete_multiple_prestadores():
     for idprestador in ids_to_delete:
         try:
             prestador = db.session.query(Prestador).filter_by(idprestador=idprestador).first()
-
+            print(f"Excluindo prestador com ID: {idprestador}")
             if not prestador:
                 failed_deletions.append(f'Prestador com ID {idprestador} não encontrado.')
                 continue

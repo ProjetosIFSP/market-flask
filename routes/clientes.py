@@ -3,9 +3,9 @@ from db_connection import db
 from models import Cliente, Venda, Compra
 import math
 
-clientes_bp = Blueprint('clientes', __name__)
+clientes_bp = Blueprint('clientes', __name__, url_prefix='/clientes')
 
-@clientes_bp.route('/clientes', methods=['GET', 'POST'])
+@clientes_bp.route('/', methods=['GET', 'POST'])
 def list_clients():
     if request.method == 'POST':
         page = request.form.get('page', 1)
@@ -33,12 +33,12 @@ def list_clients():
     showing = 10 if page < max_pages else (total - 10 * (page - 1)) % 10
     array = query.offset((page - 1) * 10).limit(10).all()
 
-    return render_template('clientes.html',
+    return render_template('clientes/clientes.html',
                             title='Clientes', context='clientes',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
 
-@clientes_bp.route('/clientes/novo', methods=['GET', 'POST'])
+@clientes_bp.route('/novo', methods=['GET', 'POST'])
 def novo_cliente():
     if request.method == 'POST':
         nome = request.form['nome']
@@ -57,9 +57,9 @@ def novo_cliente():
         return redirect(url_for('clientes.list_clients'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('form_cliente.html', estados=estados, titulo='Novo cliente', action=url_for('clientes.novo_cliente'))
+    return render_template('clientes/form_cliente.html', estados=estados, titulo='Novo cliente', action=url_for('clientes.novo_cliente'))
 
-@clientes_bp.route('/clientes/edit/<int:idcliente>', methods=['GET', 'POST'])
+@clientes_bp.route('/edit/<int:idcliente>', methods=['GET', 'POST'])
 def edit_cliente(idcliente):
     cliente = db.session.query(Cliente).filter_by(idcliente=idcliente).first()
     if not cliente:
@@ -78,9 +78,9 @@ def edit_cliente(idcliente):
         return redirect(url_for('clientes.list_clients'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('form_cliente.html', titulo='Alterando cliente', action=url_for('clientes.edit_cliente', idcliente=idcliente), cliente=cliente, estados=estados)
+    return render_template('clientes/form_cliente.html', titulo='Alterando cliente', action=url_for('clientes.edit_cliente', idcliente=idcliente), cliente=cliente, estados=estados)
 
-@clientes_bp.route('/clientes/delete/<int:idcliente>', methods=['POST'])
+@clientes_bp.route('/delete/<int:idcliente>', methods=['POST'])
 def delete_cliente(idcliente):
     cliente = db.session.query(Cliente).filter_by(idcliente=idcliente).first()
 
@@ -100,7 +100,7 @@ def delete_cliente(idcliente):
     flash('Cliente excluído com sucesso!', 'success')
     return redirect(url_for('clientes.list_clients'))
 
-@clientes_bp.route('/clientes/delete-multiple', methods=['POST'])
+@clientes_bp.route('/delete-multiple', methods=['POST'])
 def delete_multiple_clients():
     data = request.get_json()
     ids_to_delete = data.get('ids', [])

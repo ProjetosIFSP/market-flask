@@ -13,7 +13,7 @@ def listar_despesas():
     else:
         page = request.args.get('page', 1)
         search = request.args.get('search', '')
-        
+
     query = db.session.query(Despesa).join(Veiculo, Despesa.idplaca == Veiculo.idplaca).join(Prestador, Despesa.idprestador == Prestador.idprestador).add_columns(
         Despesa.iddespesa, Despesa.descricao, Despesa.data_servico, Despesa.valor, Veiculo.idplaca, Prestador.nome_empresa
     ).order_by(Despesa.data_servico.desc())
@@ -28,7 +28,7 @@ def listar_despesas():
     showing = 10 if int(page) < max_pages else (total - 10 * (int(page) - 1)) % 10
     array = query.offset((int(page) - 1) * 10).limit(10).all()
 
-    return render_template('servicos.html',
+    return render_template('servicos/servicos.html',
                             title='Serviços', context='servicos',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
@@ -50,7 +50,7 @@ def nova_despesa():
         return redirect(url_for('servicos.listar_despesas'))
     veiculos = db.session.query(Veiculo).all()
     prestadores = db.session.query(Prestador).all()
-    return render_template('form_despesa.html', veiculos=veiculos, prestadores=prestadores)
+    return render_template('servicos/form_servicos.html', veiculos=veiculos, prestadores=prestadores)
 
 @despesas_bp.route('/editar/<int:iddespesa>', methods=['GET', 'POST'])
 def editar_despesa(iddespesa):
@@ -66,7 +66,7 @@ def editar_despesa(iddespesa):
         return redirect(url_for('servicos.listar_despesas'))
     veiculos = db.session.query(Veiculo).all()
     prestadores = db.session.query(Prestador).all()
-    return render_template('form_despesa.html', despesa=despesa, veiculos=veiculos, prestadores=prestadores)
+    return render_template('servicos/form_servicos.html', despesa=despesa, veiculos=veiculos, prestadores=prestadores)
 
 @despesas_bp.route('/excluir/<int:iddespesa>', methods=['POST'])
 def excluir_despesa(iddespesa):

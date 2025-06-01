@@ -177,7 +177,7 @@ import tableHeader, tableRow, actionButtons, tableFooter %}
 
     if (
       selectedIds.length > 0 &&
-      confirm('Tem certeza que deseja apagar os registros selecionados?')
+      confirm('Tem certeza que deseja apagar os registros selecionados? ')
     ) {
       fetch('/{{context}}/delete-multiple', {
         method: 'POST',

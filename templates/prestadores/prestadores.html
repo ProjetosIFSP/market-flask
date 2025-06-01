@@ -11,8 +11,8 @@ tableRow, actionButtons, tableFooter %}
 <!--  -->
 {% for item in array %}
 <!--  -->
-{{ tableRow(item.idcliente, [item.nome_empresa, item.cidade ~ ' - ' ~ item.uf ,
-item.cep], actionButtons(url_for('prestadores.edit_prestador',
+{{ tableRow(item.idprestador, [item.nome_empresa, item.cidade ~ ' - ' ~ item.uf
+, item.cep], actionButtons(url_for('prestadores.edit_prestador',
 idprestador=item.idprestador) , url_for('prestadores.delete_prestador',
 idprestador=item.idprestador)) ) }}
 
