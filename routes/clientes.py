@@ -60,7 +60,7 @@ def novo_cliente():
     return render_template('clientes/form_cliente.html', estados=estados, titulo='Novo cliente', action=url_for('clientes.novo_cliente'))
 
 @clientes_bp.route('/edit/<int:idcliente>', methods=['GET', 'POST'])
-def edit_cliente(idcliente):
+def edit(idcliente):
     cliente = db.session.query(Cliente).filter_by(idcliente=idcliente).first()
     if not cliente:
         flash('Cliente não encontrado!', 'error')
@@ -78,10 +78,10 @@ def edit_cliente(idcliente):
         return redirect(url_for('clientes.list_clients'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('clientes/form_cliente.html', titulo='Alterando cliente', action=url_for('clientes.edit_cliente', idcliente=idcliente), cliente=cliente, estados=estados)
+    return render_template('clientes/form_cliente.html', titulo='Alterando cliente', action=url_for('clientes.edit', idcliente=idcliente), cliente=cliente, estados=estados)
 
 @clientes_bp.route('/delete/<int:idcliente>', methods=['POST'])
-def delete_cliente(idcliente):
+def delete(idcliente):
     cliente = db.session.query(Cliente).filter_by(idcliente=idcliente).first()
 
     if not cliente:

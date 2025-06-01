@@ -1,19 +1,13 @@
-{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader,
-tableRow, actionButtons, tableFooter %}
+{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader, tableRow, actionButtons, tableFooter %}
 <!--  Table Header  -->
 {% block TH %}
 <!--  -->
-{{ tableHeader(['Placa', 'Ano/Modelo', 'Fabricante', 'Modelo Veículo', 'Cor',
-'Preço FIPE', 'Preço Venda', 'Total Despesa']) }}
+{{ tableHeader(['Placa', 'Ano/Modelo', 'Fabricante', 'Modelo Veículo', 'Cor', 'Preço FIPE', 'Preço Venda', 'Total Despesa']) }}
 <!--  -->
 {% endblock %}
 <!--  Table Row  -->
 {% block TR %}
 <!--  -->
-{% for item in array %} {{ tableRow(item.idplaca, [item.idplaca, item.ano ~ '/'
-~ item.modelo, item.fabricante, item.modelo_veiculo, item.cor, item.preco_fipe,
-item.preco_venda, item.total_despesa], actionButtons(
-url_for('veiculos.edit_veiculo', idplaca=item.idplaca),
-url_for('veiculos.delete_veiculo', idplaca=item.idplaca) ) ) }} {% endfor %}
+{% for item in array %} {{ tableRow(item.idplaca, [item.idplaca, item.ano ~ '/' ~ item.modelo, item.fabricante, item.modelo_veiculo, item.cor, item.preco_fipe, item.preco_venda, item.total_despesa], actionButtons( url_for('veiculos.edit', idplaca=item.idplaca), url_for('veiculos.delete', idplaca=item.idplaca) ) ) }} {% endfor %}
 <!--  -->
 {% endblock %}

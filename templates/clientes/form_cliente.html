@@ -1,109 +1,56 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% from 'macros/_form.html' import inputText,
+inputSelect, formButtons %} {% block content %}
 <div class="flex flex-col gap-4 flex-1">
   <h1 class="text-2xl font-bold">{{ titulo }}</h1>
-  <form action="{{ action }}" method="POST" class="flex flex-col gap-4">
-    <input type="hidden" id="idcliente" name="idcliente" value="{{ cliente.idcliente if cliente else '' }}" />
-    <div class="flex flex-col">
-      <label for="nome" class="text-sm font-medium">Nome</label>
-      <input
-        type="text"
-        id="nome"
-        name="nome"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Digite o nome do cliente"
-        value="{{ cliente.nome if cliente else '' }}"
-        required
-      />
+  <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
+    <input
+      type="hidden"
+      id="idcliente"
+      name="idcliente"
+      value="{{ cliente.idcliente if cliente else '' }}"
+    />
+
+    {{ inputText(cliente.nome if cliente, 'Nome', 'Digite o nome do cliente',
+    'nome') }}
+    <!--  -->
+    <div class="flex *:last:flex-1 gap-4">
+      {{ inputText(cliente.cep if cliente, 'CEP', 'Digite o CEP', 'cep') }}
+      <!--  -->
+      {{ inputText(cliente.endereco if cliente, 'Endereço', 'Digite o endereço',
+      'endereco') }}
     </div>
-    <div class="flex flex-col">
-      <label for="endereco" class="text-sm font-medium">Endereço</label>
-      <input
-        type="text"
-        id="endereco"
-        name="endereco"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Digite o endereço"
-        value="{{ cliente.endereco if cliente else '' }}"
-        required
-      />
+    <!--  -->
+    <div class="flex *:first:flex-1 gap-4">
+      {{ inputText(cliente.cidade if cliente, 'Cidade', 'Digite a cidade',
+      'cidade') }}
+      <!--  -->
+      {{ inputSelect(estados, cliente.uf if cliente else '', 'Estado', 'uf',
+      'Selecione o estado') }}
     </div>
-    <div class="flex flex-col">
-      <label for="cidade" class="text-sm font-medium">Cidade</label>
-      <input
-        type="text"
-        id="cidade"
-        name="cidade"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Digite a cidade"
-        value="{{ cliente.cidade if cliente else '' }}"
-        required
-      />
-    </div>
-    <div class="flex flex-col">
-      <label for="uf" class="text-sm font-medium">UF</label>
-      <select
-        id="uf"
-        name="uf"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        required
-      >
-        <option value="" selected>Selecione o estado</option>
-        {% for estado in estados %}
-        <option value="{{ estado }}" {% if cliente and cliente.uf == estado %}selected{% endif %}>{{ estado }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="flex flex-col">
-      <label for="cep" class="text-sm font-medium">CEP</label>
-      <input
-        type="text"
-        id="cep"
-        name="cep"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Digite o CEP"
-        maxlength="9"
-        value="{{ cliente.cep if cliente else '' }}"
-        required
-      />
-    </div>
-    <div class="flex gap-4">
-      <button
-        type="button"
-        onclick="window.history.back()"
-        class="text-zinc-950 cursor-pointer bg-zinc-300 hover:bg-zinc-200 focus:ring-4 focus:outline-none focus:ring-zinc-300/30 font-medium rounded-lg text-sm px-4 py-2"
-      >
-        Cancelar
-      </button>
-      <button
-        type="submit"
-        class="text-zinc-50 cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-lg text-sm px-4 py-2"
-      >
-        Salvar
-      </button>
-    </div>
+    <!--  -->
+    {{ formButtons() }}
   </form>
 </div>
 <script>
   document.querySelector('form').addEventListener('submit', function (event) {
-    const inputs = document.querySelectorAll('input[type="text"], select');
-    let isValid = true;
+    const inputs = document.querySelectorAll('input[type="text"], select')
+    let isValid = true
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (input.value.trim() === '') {
-        isValid = false;
-        input.classList.add('border-red-500');
-        input.classList.remove('border-gray-300');
+        isValid = false
+        input.classList.add('border-red-500')
+        input.classList.remove('border-gray-300')
       } else {
-        input.classList.remove('border-red-500');
-        input.classList.add('border-gray-300');
+        input.classList.remove('border-red-500')
+        input.classList.add('border-gray-300')
       }
-    });
+    })
 
     if (!isValid) {
-      event.preventDefault();
-      alert('Por favor, preencha todos os campos corretamente.');
+      event.preventDefault()
+      alert('Por favor, preencha todos os campos corretamente.')
     }
-  });
+  })
 </script>
 {% endblock %}

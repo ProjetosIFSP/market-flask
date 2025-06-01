@@ -1,10 +1,8 @@
-{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader,
-tableRow, actionButtons, tableFooter %}
+{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader, tableRow, actionButtons, tableFooter %}
 <!--  Table Header  -->
 {% block TH %}
 <!--  -->
-{{ tableHeader(['Descrição', 'Data do Serviço', 'Placa do Veículo', 'Prestador',
-'Valor']) }}
+{{ tableHeader(['Descrição', 'Data do Serviço', 'Placa do Veículo', 'Prestador', 'Valor']) }}
 <!--  -->
 {% endblock %}
 <!--  Table Row  -->
@@ -12,10 +10,7 @@ tableRow, actionButtons, tableFooter %}
 <!--  -->
 {% for item in array %}
 <!--  -->
-{{ tableRow(item.idprestador, [item.descricao, item.data_servico, item.idplaca,
-item.nome_empresa, item.valor], actionButtons(
-url_for('prestadores.edit_prestador', idprestador=item.idprestador),
-url_for('prestadores.delete_prestador', idprestador=item.idprestador) ) ) }}
+{{ tableRow(item.idprestador, [item.descricao, item.data_servico, item.idplaca, item.nome_empresa, item.valor], actionButtons( url_for('servicos.edit', iddespesa=item.iddespesa), url_for('servicos.delete', iddespesa=item.iddespesa) ) ) }}
 <!--  -->
 {% endfor %}
 <!--  -->

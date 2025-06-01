@@ -1,5 +1,4 @@
-{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader,
-tableRow, actionButtons, tableFooter %}
+{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader, tableRow, actionButtons, tableFooter %}
 <!--  Table Header  -->
 {% block TH %}
 <!--  -->
@@ -11,10 +10,7 @@ tableRow, actionButtons, tableFooter %}
 <!--  -->
 {% for item in array %}
 <!--  -->
-{{ tableRow(item.idcliente, [item.nome, item.endereco ~ ', ' ~ item.cidade ~ ' -
-' ~ item.uf , item.cep], actionButtons( url_for('clientes.edit_cliente',
-idcliente=item.idcliente), url_for('clientes.delete_cliente',
-idcliente=item.idcliente) ) ) }}
+{{ tableRow(item.idcliente, [item.nome, item.endereco ~ ', ' ~ item.cidade ~ ' - ' ~ item.uf , item.cep], actionButtons( url_for('clientes.edit', idcliente=item.idcliente), url_for('clientes.delete', idcliente=item.idcliente) ) ) }}
 <!--  -->
 {% endfor %}
 <!--  -->

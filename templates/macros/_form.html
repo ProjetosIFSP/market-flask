@@ -1,0 +1,89 @@
+{% macro inputText(value, label, placeholder, data_field) %}
+<div class="flex flex-col">
+  <label for="nome" class="text-sm font-medium">{{label}}</label>
+  <input
+    type="text"
+    id="{{ data_field }}"
+    name="{{ data_field }}"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    placeholder="{{ placeholder }}"
+    value="{{ value if value else '' }}"
+    required
+  />
+</div>
+{% endmacro %}
+
+<!--  -->
+
+{% macro inputText(value, label, placeholder, data_field, type) %}
+<div class="flex flex-col">
+  <label for="nome" class="text-sm font-medium">{{label}}</label>
+  <input
+    type="{{ type }}"
+    id="{{ data_field }}"
+    name="{{ data_field }}"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    placeholder="{{ placeholder }}"
+    value="{{ value if value else '' }}"
+    required
+  />
+</div>
+{% endmacro %}
+
+<!--  -->
+
+{% macro inputText(value, label, placeholder, data_field, type, step) %}
+<div class="flex flex-col">
+  <label for="nome" class="text-sm font-medium">{{label}}</label>
+  <input
+    type="{{ type }}"
+    step="{{ step }}"
+    id="{{ data_field }}"
+    name="{{ data_field }}"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    placeholder="{{ placeholder }}"
+    value="{{ value if value else '' }}"
+    required
+  />
+</div>
+{% endmacro %}
+
+<!--  -->
+
+{% macro inputSelect(options, selected_value, label, data_field, placeholder, optionLabel) %}
+<div class="flex flex-col">
+  <label for="{{ data_field }}" class="text-sm font-medium">{{ label }}</label>
+  <select
+    id="{{ data_field }}"
+    name="{{ data_field }}"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    required
+    value="{{ selected_value }}"
+  >
+    <option value="" selected>{{ placeholder }}</option>
+    {% for option in options %}
+      <option value="{{ option[data_field] if option[data_field] else option }}" {% if (option.id == selected_value or option[data_field] == selected_value) %}selected{% endif %}>{{ option[optionLabel] if option[optionLabel] else option }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endmacro %}
+
+<!-- BUTTONS -->
+
+{% macro formButtons() %}
+<div class="flex gap-4 items-center w-1/2 mt-auto self-end">
+  <button
+    type="button"
+    onclick="window.history.back()"
+    class="flex-1 text-zinc-950 cursor-pointer bg-zinc-300 hover:bg-zinc-200 focus:ring-4 focus:outline-none focus:ring-zinc-300/30 font-medium rounded-lg text-sm px-4 py-2"
+  >
+    Cancelar
+  </button>
+  <button
+    type="submit"
+    class="flex-1 text-zinc-50 cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-lg text-sm px-4 py-2"
+  >
+    Salvar
+  </button>
+</div>
+{% endmacro %}

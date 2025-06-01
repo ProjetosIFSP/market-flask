@@ -12,10 +12,10 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
+cursor.execute("DELETE FROM despesa;")
 cursor.execute("DELETE FROM veiculo;")
 cursor.execute("DELETE FROM cliente;")
 cursor.execute("DELETE FROM prestador;")
-cursor.execute("DELETE FROM despesa;")
 
 
 # CLIENTES
@@ -52,8 +52,8 @@ for i in range(1, 112):
     fabricante = faker.random_element(elements=["Toyota", "Ford", "Chevrolet", "Honda", "Volkswagen", "Fiat", "Hyundai", "Nissan", "Jeep", "Renault"])
     modelo_veiculo = faker.random_element(elements=["Corolla", "Fiesta", "Cruze", "Civic", "Golf", "Punto", "Elantra", "Sentra", "Compass", "Duster"])
     cor = faker.color_name()[:20]  
-    preco_fipe = faker.random_number(digits=6, fix_len=True) + 1000
-    preco_venda = faker.random_number(digits=6, fix_len=True) + 1000
+    preco_fipe = faker.random_number(digits=5, fix_len=True) + 30000
+    preco_venda = faker.random_number(digits=5, fix_len=True) + 4000
     total_despesa = faker.random_number(digits=4, fix_len=True) + 100
     
     cursor.execute(

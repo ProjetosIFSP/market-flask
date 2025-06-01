@@ -74,7 +74,7 @@ def novo_veiculo():
     return render_template('veiculos/form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.novo_veiculo'))
 
 @veiculos_bp.route('/edit/<string:idplaca>', methods=['GET', 'POST'])
-def edit_veiculo(idplaca):
+def edit(idplaca):
     veiculo = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
     if not veiculo:
         flash('Veículo não encontrado!', 'error')
@@ -90,14 +90,29 @@ def edit_veiculo(idplaca):
         veiculo.preco_venda = request.form['preco_venda']
         veiculo.total_despesa = request.form['total_despesa']
 
+        new_idplaca = request.form['idplaca']
+        if new_idplaca != veiculo.idplaca:
+            existing_veiculo = db.session.query(Veiculo).filter_by(idplaca=new_idplaca).first()
+            if existing_veiculo:
+                flash('Já existe um veículo com essa placa!', 'error')
+                return redirect(url_for('veiculos.edit', idplaca=idplaca))
+            veiculo.idplaca = new_idplaca
+        db.session.add(veiculo)
+        try:
+            db.session.flush()
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao atualizar veículo: {str(e)}', 'error')
+            return redirect(url_for('veiculos.edit', idplaca=idplaca))
+
         db.session.commit()
         flash('Veículo atualizado com sucesso!', 'success')
         return redirect(url_for('veiculos.list_veiculos'))
 
-    return render_template('veiculos/form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit_veiculo', idplaca=idplaca), veiculo=veiculo)
+    return render_template('veiculos/form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit', idplaca=idplaca), veiculo=veiculo)
 
 @veiculos_bp.route('/delete/<string:idplaca>', methods=['POST'])
-def delete_veiculo(idplaca):
+def delete(idplaca):
     veiculo = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
 
     if not veiculo:
