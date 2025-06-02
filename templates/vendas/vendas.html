@@ -1,0 +1,17 @@
+{% extends 'list.html' %}{% from 'macros/_table.html' import tableHeader, tableRow, actionButtons, tableFooter %}
+<!--  Table Header  -->
+{% block TH %}
+<!--  -->
+{{ tableHeader(['Cliente', 'Data da Venda', 'Placa do Veículo', 'Valor']) }}
+<!--  -->
+{% endblock %}
+<!--  Table Row  -->
+{% block TR %}
+<!--  -->
+{% for item in array %}
+<!--  -->
+{{ tableRow(item.idvenda, [item.nome, item.data, item.idplaca, 'R$ ' ~ item.formatted_valor_vendido], actionButtons( url_for('vendas.edit', idvenda=item.idvenda), url_for('vendas.delete', idvenda=item.idvenda) ) ) }}
+<!--  -->
+{% endfor %}
+<!--  -->
+{% endblock %}
