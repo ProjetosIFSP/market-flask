@@ -1,9 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from db_connection import db
-from models import Veiculo
+from models import Veiculo, Compra, Venda, Despesa, Cliente, Prestador
 import math
 
 veiculos_bp = Blueprint('veiculos', __name__, url_prefix='/veiculos')
+
+def format_currency(currency, label, coalesce=False):
+    if coalesce:
+        return db.func.concat('R$ ', db.func.replace(db.func.replace(db.func.replace(db.func.to_char(db.func.coalesce(db.func.sum(db.func.distinct(currency)), 0), 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.')).label(label)
+    return db.func.concat('R$ ', db.func.replace(db.func.replace(db.func.replace(db.func.to_char(currency, 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.')).label(label)
+
+def format_date(date, label):
+    return db.func.to_char(date, 'DD/MM/YYYY').label(label)
 
 @veiculos_bp.route('/', methods=['GET', 'POST'])
 def list():
@@ -22,6 +30,9 @@ def list():
     search = request.args['search'] if 'search' in request.args else ''
     query = db.session.query(Veiculo)
 
+    
+    
+
     if search:
         search_terms = search.split()
         for term in search_terms:
@@ -30,6 +41,21 @@ def list():
                 Veiculo.modelo_veiculo.ilike(f"%{term}%") |
                 Veiculo.idplaca.ilike(f"%{term}%")
             )
+
+    query = query.with_entities(
+        Veiculo.idplaca,
+        Veiculo.fabricante,
+        Veiculo.modelo_veiculo,
+        Veiculo.ano,
+        Veiculo.modelo,
+        Veiculo.preco_fipe,
+        Veiculo.cor,
+        Veiculo.preco_venda,
+        Veiculo.total_despesa,
+        db.func.replace(db.func.replace(db.func.replace(db.func.to_char(Veiculo.preco_fipe, 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.').label('formatted_fipe'),
+        db.func.replace(db.func.replace(db.func.replace(db.func.to_char(Veiculo.preco_venda, 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.').label('formatted_venda'),
+        db.func.replace(db.func.replace(db.func.replace(db.func.to_char(Veiculo.total_despesa, 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.').label('formatted_despesa'),
+    )
 
     total = query.count()
     max_pages = math.ceil(total / 10)
@@ -71,7 +97,7 @@ def add():
         flash('Veículo cadastrado com sucesso!', 'success')
         return redirect(url_for('veiculos.list'))
 
-    return render_template('veiculos/form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.add'))
+    return render_template('veiculos/form_veiculo.html', title='Novo veículo', action=url_for('veiculos.add'))
 
 @veiculos_bp.route('/edit/<string:idplaca>', methods=['GET', 'POST'])
 def edit(idplaca):
@@ -109,7 +135,7 @@ def edit(idplaca):
         flash('Veículo atualizado com sucesso!', 'success')
         return redirect(url_for('veiculos.list'))
 
-    return render_template('veiculos/form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit', idplaca=idplaca), veiculo=veiculo)
+    return render_template('veiculos/form_veiculo.html', title='Alterando veículo', action=url_for('veiculos.edit', idplaca=idplaca), veiculo=veiculo)
 
 @veiculos_bp.route('/delete/<string:idplaca>', methods=['POST'])
 def delete(idplaca):
@@ -165,3 +191,67 @@ def delete_multiple():
         flash('Veículos excluídos com sucesso!', 'success')
 
     return redirect(url_for('veiculos.list'))
+
+@veiculos_bp.route('/details/<string:idplaca>', methods=['GET'])
+def details(idplaca):
+    veiculo = db.session.query(
+        Veiculo.idplaca,
+        Veiculo.fabricante,
+        Veiculo.modelo_veiculo,
+        Veiculo.ano,
+        Veiculo.modelo,
+        Veiculo.preco_fipe,
+        format_currency(Veiculo.preco_fipe, 'formatted_fipe'),
+        Veiculo.cor,
+        Veiculo.preco_venda,
+        format_currency(Veiculo.preco_venda, 'formatted_venda'),
+        Veiculo.total_despesa,
+        format_currency(Veiculo.total_despesa, 'formatted_despesa'),
+        format_currency(Compra.valor_pago, 'total_compras', True),
+        format_currency(Venda.valor_vendido, 'total_vendas', True),
+        format_currency(Despesa.valor, 'total_despesas', True),
+        db.func.concat('R$ ', db.func.replace(db.func.replace(db.func.replace(db.func.to_char(db.func.coalesce(db.func.sum(db.func.distinct(Venda.valor_vendido)) - db.func.sum(db.func.distinct(Compra.valor_pago)), 0), 'L999G999D99'), ',', 'TEMP'), '.', ','), 'TEMP', '.')).label('total_caixa')
+    ).outerjoin(Compra, Compra.idplaca == Veiculo.idplaca) \
+     .outerjoin(Venda, Venda.idplaca == Veiculo.idplaca) \
+     .outerjoin(Despesa, Despesa.idplaca == Veiculo.idplaca) \
+     .filter(Veiculo.idplaca == idplaca) \
+     .group_by(Veiculo.idplaca).first()
+
+    transactions = db.session.query(
+        db.literal('Compra').label('tipo'),
+        Compra.data.label('data'),
+        format_date(Compra.data, 'formatted_data'),
+        Compra.valor_pago.label('valor'),
+        format_currency(Compra.valor_pago, 'formatted_valor'),
+        Cliente.nome.label('cliente_nome')
+    ).outerjoin(Cliente, Cliente.idcliente == Compra.idcliente)\
+    .filter(Compra.idplaca == idplaca)\
+    .union(
+        db.session.query(
+            db.literal('Venda').label('tipo'),
+            Venda.data.label('data'),
+            format_date(Venda.data, 'formatted_data'),
+            Venda.valor_vendido.label('valor'),
+            format_currency(Venda.valor_vendido, 'formatted_valor'),
+            Cliente.nome.label('cliente_nome')
+        ).outerjoin(Cliente, Cliente.idcliente == Venda.idcliente)\
+        .filter(Venda.idplaca == idplaca)
+    ).order_by(db.desc('data')).all()
+
+    despesas = db.session.query(
+        Despesa.iddespesa,
+        Despesa.descricao,
+        format_date(Despesa.data_servico, 'data_servico'),
+        Despesa.valor,
+        format_currency(Despesa.valor, 'formatted_valor'),
+        Despesa.idplaca,
+        Despesa.idprestador,
+        Prestador.nome_empresa.label('prestador_nome')
+    ).outerjoin(Prestador, Prestador.idprestador == Despesa.idprestador)
+
+    if not veiculo:
+        flash('Veículo não encontrado!', 'error')
+        return redirect(url_for('veiculos.list'))
+
+    return render_template('veiculos/details.html', title='Detalhes do Veículo', context='veiculos', \
+                           veiculo=veiculo, transactions=transactions, despesas=despesas)

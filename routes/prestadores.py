@@ -49,7 +49,7 @@ def add():
         return redirect(url_for('prestadores.list'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('prestadores/form_prestador.html', estados=estados, titulo='Novo prestador', action=url_for('prestadores.add'))
+    return render_template('prestadores/form_prestador.html', estados=estados, title='Novo prestador', action=url_for('prestadores.add'))
 
 @prestadores_bp.route('/edit/<int:idprestador>', methods=['GET', 'POST'])
 def edit(idprestador):
@@ -69,7 +69,7 @@ def edit(idprestador):
         return redirect(url_for('prestadores.list'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('prestadores/form_prestador.html', titulo='Alterando prestador', action=url_for('prestadores.edit', idprestador=idprestador), prestador=prestador, estados=estados)
+    return render_template('prestadores/form_prestador.html', title='Alterando prestador', action=url_for('prestadores.edit', idprestador=idprestador), prestador=prestador, estados=estados)
 
 @prestadores_bp.route('/delete/<int:idprestador>', methods=['POST'])
 def delete(idprestador):

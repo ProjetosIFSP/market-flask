@@ -77,7 +77,7 @@ def add():
 
     veiculos = db.session.query(Veiculo).all()
     clientes = db.session.query(Cliente).all()
-    return render_template('compras/form_compras.html', titulo='Nova compra', veiculos=veiculos, clientes=clientes, datetime=datetime.now().strftime('%Y-%m-%d'))
+    return render_template('compras/form_compras.html', title='Nova compra', veiculos=veiculos, clientes=clientes, datetime=datetime.now().strftime('%Y-%m-%d'))
 
 @compras_bp.route('/edit/<int:idcompra>', methods=['GET', 'POST'])
 def edit(idcompra):

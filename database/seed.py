@@ -12,6 +12,8 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
+cursor.execute("DELETE FROM venda;")
+cursor.execute("DELETE FROM compra;")
 cursor.execute("DELETE FROM despesa;")
 cursor.execute("DELETE FROM veiculo;")
 cursor.execute("DELETE FROM cliente;")

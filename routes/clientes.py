@@ -57,7 +57,7 @@ def add():
         return redirect(url_for('clientes.list'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('clientes/form_cliente.html', estados=estados, titulo='Novo cliente', action=url_for('clientes.add'))
+    return render_template('clientes/form_cliente.html', estados=estados, title='Novo cliente', action=url_for('clientes.add'))
 
 @clientes_bp.route('/edit/<int:idcliente>', methods=['GET', 'POST'])
 def edit(idcliente):
@@ -78,7 +78,7 @@ def edit(idcliente):
         return redirect(url_for('clientes.list'))
 
     estados = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
-    return render_template('clientes/form_cliente.html', titulo='Alterando cliente', action=url_for('clientes.edit', idcliente=idcliente), cliente=cliente, estados=estados)
+    return render_template('clientes/form_cliente.html', title='Alterando cliente', action=url_for('clientes.edit', idcliente=idcliente), cliente=cliente, estados=estados)
 
 @clientes_bp.route('/delete/<int:idcliente>', methods=['POST'])
 def delete(idcliente):

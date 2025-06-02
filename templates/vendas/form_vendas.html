@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% from 'macros/_form.html' import inputText, inputSelect, formButtons %} {% block content %}
 <div class="flex flex-col gap-4 flex-1">
-  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <h1 class="text-2xl font-bold">{{ title }}</h1>
   <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
     <input type="hidden" id="idvenda" name="idvenda" value="{{ venda.idvenda if venda else '' }}" />
     {{ inputText(venda.data if venda else datetime, 'Data da Venda', 'Digite a data da venda', 'data', 'date') }}

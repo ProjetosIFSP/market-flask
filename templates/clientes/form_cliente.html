@@ -1,56 +1,46 @@
-{% extends 'base.html' %} {% from 'macros/_form.html' import inputText,
-inputSelect, formButtons %} {% block content %}
+{% extends 'base.html' %} {% from 'macros/_form.html' import inputText, inputSelect, formButtons %} {% block content %}
 <div class="flex flex-col gap-4 flex-1">
-  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <h1 class="text-2xl font-bold">{{ title }}</h1>
   <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
-    <input
-      type="hidden"
-      id="idcliente"
-      name="idcliente"
-      value="{{ cliente.idcliente if cliente else '' }}"
-    />
+    <input type="hidden" id="idcliente" name="idcliente" value="{{ cliente.idcliente if cliente else '' }}" />
 
-    {{ inputText(cliente.nome if cliente, 'Nome', 'Digite o nome do cliente',
-    'nome') }}
+    {{ inputText(cliente.nome if cliente, 'Nome', 'Digite o nome do cliente', 'nome') }}
     <!--  -->
     <div class="flex *:last:flex-1 gap-4">
       {{ inputText(cliente.cep if cliente, 'CEP', 'Digite o CEP', 'cep') }}
       <!--  -->
-      {{ inputText(cliente.endereco if cliente, 'Endereço', 'Digite o endereço',
-      'endereco') }}
+      {{ inputText(cliente.endereco if cliente, 'Endereço', 'Digite o endereço', 'endereco') }}
     </div>
     <!--  -->
     <div class="flex *:first:flex-1 gap-4">
-      {{ inputText(cliente.cidade if cliente, 'Cidade', 'Digite a cidade',
-      'cidade') }}
+      {{ inputText(cliente.cidade if cliente, 'Cidade', 'Digite a cidade', 'cidade') }}
       <!--  -->
-      {{ inputSelect(estados, cliente.uf if cliente else '', 'Estado', 'uf',
-      'Selecione o estado') }}
+      {{ inputSelect(estados, cliente.uf if cliente else '', 'Estado', 'uf', 'Selecione o estado') }}
     </div>
     <!--  -->
     {{ formButtons() }}
   </form>
 </div>
 <script>
-  document.querySelector('form').addEventListener('submit', function (event) {
-    const inputs = document.querySelectorAll('input[type="text"], select')
-    let isValid = true
+  document.querySelector("form").addEventListener("submit", function (event) {
+    const inputs = document.querySelectorAll('input[type="text"], select');
+    let isValid = true;
 
     inputs.forEach((input) => {
-      if (input.value.trim() === '') {
-        isValid = false
-        input.classList.add('border-red-500')
-        input.classList.remove('border-gray-300')
+      if (input.value.trim() === "") {
+        isValid = false;
+        input.classList.add("border-red-500");
+        input.classList.remove("border-gray-300");
       } else {
-        input.classList.remove('border-red-500')
-        input.classList.add('border-gray-300')
+        input.classList.remove("border-red-500");
+        input.classList.add("border-gray-300");
       }
-    })
+    });
 
     if (!isValid) {
-      event.preventDefault()
-      alert('Por favor, preencha todos os campos corretamente.')
+      event.preventDefault();
+      alert("Por favor, preencha todos os campos corretamente.");
     }
-  })
+  });
 </script>
 {% endblock %}

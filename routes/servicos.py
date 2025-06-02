@@ -75,7 +75,7 @@ def add():
 
     veiculos = db.session.query(Veiculo).all()
     prestadores = db.session.query(Prestador).all()
-    return render_template('servicos/form_servicos.html', titulo='Novo serviço', veiculos=veiculos, prestadores=prestadores, datetime=datetime.now().strftime('%Y-%m-%d'))
+    return render_template('servicos/form_servicos.html', title='Novo serviço', veiculos=veiculos, prestadores=prestadores, datetime=datetime.now().strftime('%Y-%m-%d'))
 
 @despesas_bp.route('/edit/<int:iddespesa>', methods=['GET', 'POST'])
 def edit(iddespesa):

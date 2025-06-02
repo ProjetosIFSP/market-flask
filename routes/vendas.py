@@ -75,11 +75,9 @@ def add():
             flash('Erro ao adicionar venda: Veículo ou Cliente não encontrado.', 'danger')
             return redirect(url_for('vendas.add'))
 
-    veiculos = db.session.query(Veiculo).filter(~Veiculo.idplaca.in_(
-      db.session.query(Venda.idplaca).distinct()
-    )).all()
+    veiculos = db.session.query(Veiculo).all()
     clientes = db.session.query(Cliente).all()
-    return render_template('vendas/form_vendas.html', titulo='Nova venda', veiculos=veiculos, clientes=clientes, datetime=datetime.now().strftime('%Y-%m-%d'))
+    return render_template('vendas/form_vendas.html', title='Nova venda', veiculos=veiculos, clientes=clientes, datetime=datetime.now().strftime('%Y-%m-%d'))
 
 @vendas_bp.route('/edit/<int:idvenda>', methods=['GET', 'POST'])
 def edit(idvenda):

@@ -8,6 +8,6 @@
 <!--  Table Row  -->
 {% block TR %}
 <!--  -->
-{% for item in array %} {{ tableRow(item.idplaca, [item.idplaca, item.ano ~ '/' ~ item.modelo, item.fabricante, item.modelo_veiculo, item.cor, item.preco_fipe, item.preco_venda, item.total_despesa], actionButtons( url_for('veiculos.edit', idplaca=item.idplaca), url_for('veiculos.delete', idplaca=item.idplaca) ) ) }} {% endfor %}
+{% for item in array %} {{ tableRow(item.idplaca, [item.idplaca, item.ano ~ '/' ~ item.modelo, item.fabricante, item.modelo_veiculo, item.cor, 'R$ ' ~ item.formatted_fipe, 'R$ ' ~ item.formatted_venda, 'R$ ' ~ item.formatted_despesa], actionButtons( url_for('veiculos.edit', idplaca=item.idplaca), url_for('veiculos.delete', idplaca=item.idplaca), url_for('veiculos.details', idplaca=item.idplaca) ) ) }} {% endfor %}
 <!--  -->
 {% endblock %}

@@ -1,25 +1,16 @@
-{% extends 'base.html' %} {% from 'macros/_form.html' import inputText,
-inputSelect, formButtons %} {% block content %}
+{% extends 'base.html' %} {% from 'macros/_form.html' import inputText, inputSelect, formButtons %} {% block content %}
 <div class="flex flex-col gap-4 flex-1">
-  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <h1 class="text-2xl font-bold">{{ title }}</h1>
   <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
-    <input
-      type="hidden"
-      id="idprestador"
-      name="idprestador"
-      value="{{ prestador.idprestador if prestador else '' }}"
-    />
+    <input type="hidden" id="idprestador" name="idprestador" value="{{ prestador.idprestador if prestador else '' }}" />
 
-    {{ inputText(prestador.nome_empresa if prestador, 'Nome da empresa',
-    ''+'Digite o nome da empresa', 'nome_empresa') }}
+    {{ inputText(prestador.nome_empresa if prestador, 'Nome da empresa', ''+'Digite o nome da empresa', 'nome_empresa') }}
     <!--  -->
     {{ inputText(prestador.cep if prestador, 'CEP', 'Digite o CEP', 'cep') }}
     <div class="flex *:first:flex-1 gap-4">
-      {{ inputText(prestador.cidade if prestador, 'Cidade', 'Digite a cidade',
-      'cidade') }}
+      {{ inputText(prestador.cidade if prestador, 'Cidade', 'Digite a cidade', 'cidade') }}
       <!--  -->
-      {{ inputSelect(estados, prestador.uf if prestador else '', 'Estado', 'uf',
-      'Selecione o estado') }}
+      {{ inputSelect(estados, prestador.uf if prestador else '', 'Estado', 'uf', 'Selecione o estado') }}
     </div>
 
     {{ formButtons() }}

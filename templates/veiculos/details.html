@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% from 'macros/_table.html' import miniTable %} {% block content %}
+<div class="flex flex-col gap-4 flex-1">
+  <h1 class="text-2xl font-bold">{{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }}
+    <span class="text-zinc-500"> {{ veiculo.idplaca }}</span>
+  </h1>
+
+  <div class="flex justify-between gap-12 flex-1">
+    <div class="flex flex-col gap-4 mt-6">
+      <p class="text-md font-bold">Cor: <span class="font-normal">{{ veiculo.cor }}</span></p>
+      <p class="text-md font-bold">Ano/modelo: <span class="font-normal">{{ veiculo.ano ~'/'~ veiculo.modelo }}</span></p>
+      <p class="text-md font-bold">Preço FIPE: <span class="font-normal">{{ veiculo.formatted_fipe }}</span></p>
+      <p class="text-md font-bold">Preço sugerido: <span class="font-normal">{{ veiculo.formatted_venda }}</span></p>
+      <p class="text-md font-bold">Despesa Inicial: <span class="font-normal">{{ veiculo.formatted_despesa }}</span></p>
+    </div>
+    <div class="flex flex-1 justify-between gap-4">
+      <div class="flex flex-3 flex-col border border-zinc-300 rounded-2xl p-4">
+        <p class="text-md font-bold text-center">Transações</p>
+        {{ miniTable(
+          transactions,
+          ['cliente_nome', 'tipo', 'formatted_data', 'formatted_valor'],
+      ) }}
+      <p class="italic text-sm text-zinc-500 mt-auto text-right border-t border-zinc-300 pt-2">
+        Total: 
+        <span class="text-blue-900">{{ veiculo.total_vendas }}</span>
+        -
+        <span class="text-red-800">{{ veiculo.total_compras }}</span>
+        =
+        <span class="text-zinc-950 font-bold">{{ veiculo.total_caixa }}</span>
+      </p>
+      </div>
+      <div class="flex flex-col flex-2 border border-zinc-300 rounded-2xl p-4">
+        <p class="text-md font-bold text-center">Despesas</p>
+        {{ miniTable(
+          despesas,
+          ['prestador_nome', 'data_servico', 'formatted_valor'],
+      ) }}
+      <p class="italic text-sm text-zinc-500 mt-auto text-right border-t border-zinc-300 pt-2">
+        Total: 
+        <span class="text-zinc-950 font-bold">{{ veiculo.total_despesas }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-4 items-center w-1/2 mt-auto self-end">
+    <button
+      type="button"
+      onclick="window.history.back()"
+      class="flex-1 text-zinc-950 cursor-pointer bg-zinc-300 hover:bg-zinc-200 focus:ring-4 focus:outline-none focus:ring-zinc-300/30 font-medium rounded-lg text-sm px-4 py-2"
+    >
+      Voltar
+    </button>
+  </div>
+</div>
+{% endblock %}
+</div>

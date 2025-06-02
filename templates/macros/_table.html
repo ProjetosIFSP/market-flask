@@ -1,13 +1,8 @@
 {% macro tableHeader(headerLabels) %}
 <thead>
   <tr class="border-b border-zinc-950/10">
-    <th
-      class="py-3 px-4 text-sm font-semibold w-10 text-center translate-y-0.5"
-    >
-      <input
-        type="checkbox"
-        class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm"
-      />
+    <th class="py-3 px-4 text-sm font-semibold w-10 text-center translate-y-0.5">
+      <input type="checkbox" class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm" />
     </th>
 
     {% for label in headerLabels %}
@@ -24,10 +19,7 @@
 
 <tr class="border-b border-white/10 hover:bg-white/5" data-id="{{ id }}">
   <td class="py-3 px-4 text-sm text-zinc-700">
-    <input
-      type="checkbox"
-      class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm translate-y-0.5"
-    />
+    <input type="checkbox" class="w-4 h-4 accent-green-600 text-green-600 bg-zinc-100 border-zinc-300 cursor-pointer rounded-sm translate-y-0.5" />
   </td>
 
   {% for data in rowData %}
@@ -40,45 +32,24 @@
 
 <!--       > -->
 
-{% macro actionButtons(editUrl, deleteUrl) %}
+{% macro actionButtons(editUrl, deleteUrl, detailsUrl) %}
 <div class="flex gap-1.5">
-  <a
-    href="{{ editUrl }}"
-    type="button"
-    class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-    >
-      <path
-        fill="currentColor"
-        d="M14.236 1.764a2.62 2.62 0 0 0-3.707 0L2.657 9.636a2.96 2.96 0 0 0-.772 1.354l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772l7.872-7.872a2.62 2.62 0 0 0 0-3.707m-3 .707a1.621 1.621 0 1 1 2.293 2.293l-.779.779l-2.293-2.293zM9.75 3.957l2.293 2.293l-6.386 6.386a1.95 1.95 0 0 1-.896.51l-2.567.66l.66-2.567a1.94 1.94 0 0 1 .51-.896z"
-      />
+  {% if detailsUrl %}
+  <a href="{{ detailsUrl }}" type="button" class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M2.984 8.625v.003a.5.5 0 0 1-.612.355c-.431-.114-.355-.611-.355-.611l.018-.062s.026-.084.047-.145a6.7 6.7 0 0 1 1.117-1.982C4.096 5.089 5.605 4 8 4s3.904 1.089 4.802 2.183a6.7 6.7 0 0 1 1.117 1.982a4 4 0 0 1 .06.187l.003.013v.004l.001.002a.5.5 0 0 1-.966.258l-.001-.004l-.008-.025l-.035-.109a5.7 5.7 0 0 0-.945-1.674C11.286 5.912 10.045 5 8 5s-3.285.912-4.028 1.817a5.7 5.7 0 0 0-.945 1.674l-.035.109zM8 7a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M6.5 9.5a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0" /></svg>
+  </a>
+  {% endif %}
+
+  <a href="{{ editUrl }}" type="button" class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 transition-colors duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+      <path fill="currentColor" d="M14.236 1.764a2.62 2.62 0 0 0-3.707 0L2.657 9.636a2.96 2.96 0 0 0-.772 1.354l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772l7.872-7.872a2.62 2.62 0 0 0 0-3.707m-3 .707a1.621 1.621 0 1 1 2.293 2.293l-.779.779l-2.293-2.293zM9.75 3.957l2.293 2.293l-6.386 6.386a1.95 1.95 0 0 1-.896.51l-2.567.66l.66-2.567a1.94 1.94 0 0 1 .51-.896z" />
     </svg>
   </a>
 
-  <form
-    action="{{ deleteUrl }}"
-    method="post"
-    onsubmit="return confirm('Tem certeza que deseja apagar?');"
-  >
-    <button
-      type="submit"
-      class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 cursor-pointer transition-colors duration-300"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill="currentColor"
-          d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.564l-1.205 8.838A2.5 2.5 0 0 1 9.754 15H6.246a2.5 2.5 0 0 1-2.477-2.162L2.564 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5m-4.74 6.703A1.5 1.5 0 0 0 6.246 14h3.508a1.5 1.5 0 0 0 1.487-1.297L12.427 4H3.573z"
-        />
+  <form action="{{ deleteUrl }}" method="post" onsubmit="return confirm('Tem certeza que deseja apagar?');">
+    <button type="submit" class="bg-zinc-200/50 rounded-md text-zinc-950 p-1.5 hover:bg-zinc-300 cursor-pointer transition-colors duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.564l-1.205 8.838A2.5 2.5 0 0 1 9.754 15H6.246a2.5 2.5 0 0 1-2.477-2.162L2.564 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5m-4.74 6.703A1.5 1.5 0 0 0 6.246 14h3.508a1.5 1.5 0 0 0 1.487-1.297L12.427 4H3.573z" />
       </svg>
     </button>
   </form>
@@ -88,23 +59,15 @@
 <!--       > -->
 
 {% macro tableFooter(showing, total, page, max_pages) %}
-<tfoot
-  class="absolute w-full flex justify-between bottom-0 bg-zinc-50 border-t border-zinc-950/10"
->
+<tfoot class="absolute w-full flex justify-between bottom-0 bg-zinc-50 border-t border-zinc-950/10">
   <tr class="flex w-full justify-between items-center">
-    <td
-      class="py-3 px-4 text-sm text-zinc-700 col-span-4 max-h-max"
-      colspan="3"
-    >
+    <td class="py-3 px-4 text-sm text-zinc-700 col-span-4 max-h-max" colspan="3">
       Mostrando
       <span class="font-semibold">{{ showing }}</span>
       de <span class="font-semibold">{{ total }}</span> itens
     </td>
 
-    <td
-      class="py-3 px-4 text-sm text-zinc-700 col-span-2 text-right"
-      colspan="3"
-    >
+    <td class="py-3 px-4 text-sm text-zinc-700 col-span-2 text-right" colspan="3">
       <div class="inline-flex justify-center gap-8">
         <span class="place-content-center">
           Página <span class="font-semibold"> {{ page }} </span> de
@@ -119,16 +82,8 @@
                    {{ 'pointer-events-none !bg-zinc-100/50' if (page == 1) }}"
             tabindex="{{ '0' if (page > 1) else '-1' }}"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill="currentColor"
-                d="M8.354 12.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 1 1 .708.708L4.207 8zm4 0a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708.708L8.207 8z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <path fill="currentColor" d="M8.354 12.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 1 1 .708.708L4.207 8zm4 0a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708.708L8.207 8z" />
             </svg>
           </a>
           <a
@@ -138,16 +93,8 @@
                    {{ 'pointer-events-none !bg-zinc-100/50' if (page == 1) }}"
             tabindex="{{ '0' if (page > 1) else '-1' }}"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill="currentColor"
-                d="M10.354 3.146a.5.5 0 0 1 0 .708L6.207 8l4.147 4.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708 0"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <path fill="currentColor" d="M10.354 3.146a.5.5 0 0 1 0 .708L6.207 8l4.147 4.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708 0" />
             </svg>
           </a>
           <a
@@ -157,16 +104,8 @@
                   {{ 'pointer-events-none !bg-zinc-100/50' if (page >= max_pages) }}"
             tabindex="{{ '0' if (page < max_pages) else '-1' }}"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill="currentColor"
-                d="M5.646 3.146a.5.5 0 0 0 0 .708L9.793 8l-4.147 4.146a.5.5 0 0 0 .708.708l4.5-4.5a.5.5 0 0 0 0-.708l-4.5-4.5a.5.5 0 0 0-.708 0"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <path fill="currentColor" d="M5.646 3.146a.5.5 0 0 0 0 .708L9.793 8l-4.147 4.146a.5.5 0 0 0 .708.708l4.5-4.5a.5.5 0 0 0 0-.708l-4.5-4.5a.5.5 0 0 0-.708 0" />
             </svg>
           </a>
           <a
@@ -176,16 +115,8 @@
                   {{ 'pointer-events-none !bg-zinc-100/50' if (page == max_pages) }}"
             tabindex="{{ '0' if (page < max_pages) else '-1' }}"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill="currentColor"
-                d="M7.646 3.854a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L11.793 8zm-4 0a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L7.793 8z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <path fill="currentColor" d="M7.646 3.854a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L11.793 8zm-4 0a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L7.793 8z" />
             </svg>
           </a>
         </div>
@@ -193,4 +124,20 @@
     </td>
   </tr>
 </tfoot>
+{% endmacro %}
+
+<!--  -->
+
+{% macro miniTable(rows, rowindexes) %}
+<table class="w-full">
+  <tbody>
+    {% for row in rows %}
+    <tr class="border-b border-white/10 hover:bg-white/5">
+      {% for index in rowindexes %}
+      <td class="py-3 px-4 text-sm text-zinc-700 {{'!text-red-800 font-bold' if (index == 'tipo' and row[index] == 'Compra') else '!text-sky-900 font-bold' if (index == 'tipo' and row[index] == 'Venda') }}">{{ row[index] }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endmacro %}

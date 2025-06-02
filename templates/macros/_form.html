@@ -31,7 +31,7 @@
   >
     <option value="" selected>{{ placeholder }}</option>
     {% for option in options %}
-      <option value="{{ option[data_field] if option[data_field] else option }}" {% if (option.id == selected_value or option[data_field] == selected_value) %}selected{% endif %}>{{ option[optionLabel] if option[optionLabel] else option }}</option>
+      <option value="{{ option[data_field] if (option[data_field] and option[data_field] != '') else option }}" {% if (option == selected_value or option[data_field] == selected_value) %}selected{% endif %}>{{ option[optionLabel] if option[optionLabel] else option }}</option>
     {% endfor %}
   </select>
 </div>
