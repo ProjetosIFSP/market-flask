@@ -6,7 +6,7 @@ import math
 veiculos_bp = Blueprint('veiculos', __name__, url_prefix='/veiculos')
 
 @veiculos_bp.route('/', methods=['GET', 'POST'])
-def list_veiculos():
+def list():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
@@ -41,8 +41,8 @@ def list_veiculos():
                             title='Veículos', context='veiculos',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
-@veiculos_bp.route('/novo', methods=['GET', 'POST'])
-def novo_veiculo():
+@veiculos_bp.route('/add', methods=['GET', 'POST'])
+def add():
     if request.method == 'POST':
         idplaca = request.form['idplaca']
         ano = request.form['ano']
@@ -54,7 +54,7 @@ def novo_veiculo():
         preco_venda = request.form['preco_venda']
         total_despesa = request.form['total_despesa']
 
-        novo_veiculo = Veiculo(
+        new_vehicle = Veiculo(
             idplaca=idplaca,
             ano=ano,
             modelo=modelo,
@@ -65,20 +65,20 @@ def novo_veiculo():
             preco_venda=preco_venda,
             total_despesa=total_despesa
         )
-        db.session.add(novo_veiculo)
+        db.session.add(new_vehicle)
         db.session.commit()
 
         flash('Veículo cadastrado com sucesso!', 'success')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
-    return render_template('veiculos/form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.novo_veiculo'))
+    return render_template('veiculos/form_veiculo.html', titulo='Novo veículo', action=url_for('veiculos.add'))
 
 @veiculos_bp.route('/edit/<string:idplaca>', methods=['GET', 'POST'])
 def edit(idplaca):
     veiculo = db.session.query(Veiculo).filter_by(idplaca=idplaca).first()
     if not veiculo:
         flash('Veículo não encontrado!', 'error')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
     if request.method == 'POST':
         veiculo.ano = request.form['ano']
@@ -107,7 +107,7 @@ def edit(idplaca):
 
         db.session.commit()
         flash('Veículo atualizado com sucesso!', 'success')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
     return render_template('veiculos/form_veiculo.html', titulo='Alterando veículo', action=url_for('veiculos.edit', idplaca=idplaca), veiculo=veiculo)
 
@@ -117,7 +117,7 @@ def delete(idplaca):
 
     if not veiculo:
         flash('Veículo não encontrado!', 'error')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
     try:
         db.session.delete(veiculo)
@@ -126,7 +126,7 @@ def delete(idplaca):
     except Exception:
         flash('Erro ao excluir veículo. Tente novamente.', 'error')
 
-    return redirect(url_for('veiculos.list_veiculos'))
+    return redirect(url_for('veiculos.list'))
 
 @veiculos_bp.route('/delete-multiple', methods=['POST'])
 def delete_multiple():
@@ -137,7 +137,7 @@ def delete_multiple():
 
     if not ids_to_delete:
         flash('Nenhum veículo selecionado para exclusão.', 'error')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
     failed_deletions = []
 
@@ -157,11 +157,11 @@ def delete_multiple():
         db.session.commit()
     except Exception:
         flash('Erro ao realizar exclusão em massa. Tente novamente.', 'error')
-        return redirect(url_for('veiculos.list_veiculos'))
+        return redirect(url_for('veiculos.list'))
 
     if failed_deletions:
         flash('Alguns veículos não puderam ser excluídos: ' + ', '.join(failed_deletions), 'error')
     else:
         flash('Veículos excluídos com sucesso!', 'success')
 
-    return redirect(url_for('veiculos.list_veiculos'))
+    return redirect(url_for('veiculos.list'))

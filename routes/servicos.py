@@ -6,7 +6,7 @@ import math
 despesas_bp = Blueprint('servicos', __name__, url_prefix='/servicos')
 
 @despesas_bp.route('/', methods=['GET', 'POST'])
-def listar_despesas():
+def list():
     if request.method == 'POST':
         page = request.form.get('page', 1)
         search = request.form.get('search', '')
@@ -37,8 +37,8 @@ def listar_despesas():
                             title='Serviços', context='servicos',
                             array=array, total=total, page=page, search=search, max_pages=max_pages, showing=showing)
 
-@despesas_bp.route('/novo', methods=['GET', 'POST'])
-def nova_despesa():
+@despesas_bp.route('/add', methods=['GET', 'POST'])
+def add():
     if request.method == 'POST':
         print(json.dumps(request.form))
 
@@ -52,7 +52,7 @@ def nova_despesa():
         iddespesa = (iddespesa + 1) if iddespesa is not None else 1
 
         if veiculo and prestador:
-            nova_despesa = Despesa(
+            new_expense = Despesa(
                 iddespesa=iddespesa,
                 descricao=request.form['descricao'],
                 data_servico=request.form['data_servico'],
@@ -60,13 +60,13 @@ def nova_despesa():
                 idplaca=veiculo.idplaca,
                 idprestador=prestador.idprestador
             )
-            db.session.add(nova_despesa)
+            db.session.add(new_expense)
             db.session.commit()
             flash('Despesa adicionada com sucesso!', 'success')
-            return redirect(url_for('servicos.listar_despesas'))
+            return redirect(url_for('servicos.list'))
         else:
             flash('Erro ao adicionar despesa: Veículo ou Prestador não encontrado.', 'danger')
-            return redirect(url_for('servicos.nova_despesa'))
+            return redirect(url_for('servicos.add'))
 
     veiculos = db.session.query(Veiculo).all()
     prestadores = db.session.query(Prestador).all()
@@ -85,7 +85,7 @@ def edit(iddespesa):
 
         db.session.commit()
         flash('Despesa atualizada com sucesso!', 'success')
-        return redirect(url_for('servicos.listar_despesas'))
+        return redirect(url_for('servicos.list'))
     veiculos = db.session.query(Veiculo).all()
     prestadores = db.session.query(Prestador).all()
     return render_template('servicos/form_servicos.html', despesa=despesa, veiculos=veiculos, prestadores=prestadores)
@@ -96,7 +96,7 @@ def delete(iddespesa):
     db.session.delete(despesa)
     db.session.commit()
     flash('Despesa excluída com sucesso!', 'success')
-    return redirect(url_for('servicos.listar_despesas'))
+    return redirect(url_for('servicos.list'))
 
 @despesas_bp.route('/delete-multiple', methods=['POST'])
 def delete_multiple():
@@ -106,4 +106,4 @@ def delete_multiple():
         db.session.delete(despesa)
     db.session.commit()
     flash('Despesas selecionadas excluídas com sucesso!', 'success')
-    return redirect(url_for('servicos.listar_despesas'))
+    return redirect(url_for('servicos.list'))

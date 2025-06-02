@@ -1,34 +1,14 @@
-{% extends 'base.html' %} {% block content %} {% from 'macros/_table.html'
-import tableHeader, tableRow, actionButtons, tableFooter %}
+{% extends 'base.html' %} {% block content %} {% from 'macros/_table.html' import tableHeader, tableRow, actionButtons, tableFooter %}
 
 <div class="flex flex-col gap-4 flex-1">
   <div class="flex gap-3 items-center">
     <h1 class="text-2xl font-bold">{{title}}</h1>
-    <div
-      class="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3"
-    >
-      <form
-        class="max-w-md mx-auto"
-        onsubmit="event.preventDefault(); const params = new URLSearchParams(window.location.search); params.set('search', document.getElementById('search').value); params.set('page', 1); window.location.href = `?${params.toString()}`;"
-      >
+    <div class="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3">
+      <form class="max-w-md mx-auto" onsubmit="event.preventDefault(); const params = new URLSearchParams(window.location.search); params.set('search', document.getElementById('search').value); params.set('page', 1); window.location.href = `?${params.toString()}`;">
         <div class="relative">
-          <div
-            class="absolute inset-y-0 start-2 flex items-center ps-3 pointer-events-none"
-          >
-            <svg
-              class="w-4 h-4 text-zinc-500"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
+          <div class="absolute inset-y-0 start-2 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-zinc-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
             </svg>
           </div>
 
@@ -44,40 +24,22 @@ import tableHeader, tableRow, actionButtons, tableFooter %}
       </form>
     </div>
     <div class="flex justify-end py-2">
-      <button
-        id="deleteSelectedButton"
-        onclick="deleteSelected()"
-        class="focus:ring-4 focus:outline-none focus:ring-red-600/30 bg-red-600 hover:bg-red-500 text-sm text-white py-1.5 px-4 rounded-full cursor-pointer hidden"
-      >
-        Excluir Selecionados
-      </button>
+      <button id="deleteSelectedButton" onclick="deleteSelected()" class="focus:ring-4 focus:outline-none focus:ring-red-600/30 bg-red-600 hover:bg-red-500 text-sm text-white py-1.5 px-4 rounded-full cursor-pointer hidden">Excluir Selecionados</button>
     </div>
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
     <div class="w-full flex-1 flex">
       {% for category, message in messages %}
       <div class="text-green-600 italic font-semibold">{{ message }}</div>
       {% endfor %}
     </div>
     {% endif %} {% endwith %}
-    <a
-      type="button"
-      href="/{{context}}/novo"
-      class="text-zinc-50 ml-auto cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-full text-sm px-4 py-2"
-    >
-      Novo registro
-    </a>
+    <a type="button" href="/{{context}}/add" class="text-zinc-50 ml-auto cursor-pointer bg-zinc-950 hover:bg-zinc-800 focus:ring-4 focus:outline-none focus:ring-zinc-950/30 font-medium rounded-full text-sm px-4 py-2"> Novo registro </a>
   </div>
 
-  <div
-    class="relative flex flex-col flex-1 border border-zinc-950/10 rounded-lg"
-  >
+  <div class="relative flex flex-col flex-1 border border-zinc-950/10 rounded-lg">
     {% if total <= 0 %}
     <div class="flex justify-center h-full flex-1 items-center">
-      <p class="text-lg italic font-medium text-zinc-400">
-        Não há registros para serem exibidos {{'com esta pesquisa' if (search !=
-        '')}}
-      </p>
+      <p class="text-lg italic font-medium text-zinc-400">Não há registros para serem exibidos {{'com esta pesquisa' if (search != '')}}</p>
     </div>
     {% else %}
 
@@ -92,106 +54,85 @@ import tableHeader, tableRow, actionButtons, tableFooter %}
   </div>
 </div>
 
-<div
-  id="deleteModal"
-  class="fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center hidden"
->
+<div id="deleteModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center hidden">
   <div class="bg-white p-6 rounded-lg shadow-lg">
     <h2 class="text-lg font-bold mb-4">Confirmar Exclusão</h2>
     <p class="mb-4">Tem certeza de que deseja excluir este veículo?</p>
     <form id="deleteForm" method="POST">
-      <button
-        type="button"
-        onclick="closeModal()"
-        class="bg-gray-300 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded"
-      >
-        Cancelar
-      </button>
-      <button
-        type="submit"
-        class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"
-      >
-        Excluir
-      </button>
+      <button type="button" onclick="closeModal()" class="bg-gray-300 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded">Cancelar</button>
+      <button type="submit" class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded">Excluir</button>
     </form>
   </div>
 </div>
 
 <script>
-  const searchInput = document.getElementById('search')
-  const contentTable = document.getElementById('content-table')
+  const searchInput = document.getElementById("search");
+  const contentTable = document.getElementById("content-table");
 
-  searchInput.addEventListener('input', () => {
-    const params = new URLSearchParams(window.location.search)
-    params.set('search', searchInput.value)
-    params.set('page', 1)
-    history.pushState({}, '', `?${params.toString()}`)
-  })
+  searchInput.addEventListener("input", () => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("search", searchInput.value);
+    params.set("page", 1);
+    history.pushState({}, "", `?${params.toString()}`);
+  });
 
   function openModal(actionUrl) {
-    const modal = document.getElementById('deleteModal')
-    const form = document.getElementById('deleteForm')
-    form.action = actionUrl
-    modal.classList.remove('hidden')
-    modal.classList.add('flex')
+    const modal = document.getElementById("deleteModal");
+    const form = document.getElementById("deleteForm");
+    form.action = actionUrl;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
   }
 
   function closeModal() {
-    const modal = document.getElementById('deleteModal')
-    modal.classList.add('hidden')
-    modal.classList.remove('flex')
+    const modal = document.getElementById("deleteModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
   }
 
-  const headerCheckbox = document.querySelector('thead input[type=checkbox]')
-  const rowCheckboxes = document.querySelectorAll('tbody input[type=checkbox]')
-  const deleteSelectedButton = document.getElementById('deleteSelectedButton')
+  const headerCheckbox = document.querySelector("thead input[type=checkbox]");
+  const rowCheckboxes = document.querySelectorAll("tbody input[type=checkbox]");
+  const deleteSelectedButton = document.getElementById("deleteSelectedButton");
 
-  headerCheckbox.addEventListener('change', () => {
+  headerCheckbox.addEventListener("change", () => {
     rowCheckboxes.forEach((checkbox) => {
-      checkbox.checked = headerCheckbox.checked
-    })
-    toggleDeleteButton()
-  })
+      checkbox.checked = headerCheckbox.checked;
+    });
+    toggleDeleteButton();
+  });
 
   rowCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener('change', () => {
-      const allChecked = Array.from(rowCheckboxes).every(
-        (checkbox) => checkbox.checked
-      )
-      headerCheckbox.checked = allChecked
-      toggleDeleteButton()
-    })
-  })
+    checkbox.addEventListener("change", () => {
+      const allChecked = Array.from(rowCheckboxes).every((checkbox) => checkbox.checked);
+      headerCheckbox.checked = allChecked;
+      toggleDeleteButton();
+    });
+  });
 
   function toggleDeleteButton() {
-    const anySelected = Array.from(rowCheckboxes).some(
-      (checkbox) => checkbox.checked
-    )
-    deleteSelectedButton.style.display = anySelected ? 'block' : 'none'
+    const anySelected = Array.from(rowCheckboxes).some((checkbox) => checkbox.checked);
+    deleteSelectedButton.style.display = anySelected ? "block" : "none";
   }
 
   function deleteSelected() {
     const selectedIds = Array.from(rowCheckboxes)
       .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.closest('tr').dataset.id)
+      .map((checkbox) => checkbox.closest("tr").dataset.id);
 
-    if (
-      selectedIds.length > 0 &&
-      confirm('Tem certeza que deseja apagar os registros selecionados? ')
-    ) {
-      fetch('/{{context}}/delete-multiple', {
-        method: 'POST',
+    if (selectedIds.length > 0 && confirm("Tem certeza que deseja apagar os registros selecionados? ")) {
+      fetch("/{{context}}/delete-multiple", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ids: selectedIds }),
       }).then((response) => {
         if (response.ok) {
-          window.location.reload()
+          window.location.reload();
         } else {
-          alert('Erro ao deletar registros selecionados.')
+          alert("Erro ao deletar registros selecionados.");
         }
-      })
+      });
     }
   }
 </script>

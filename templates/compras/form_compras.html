@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% from 'macros/_form.html' import inputText, inputSelect, formButtons %} {% block content %}
+<div class="flex flex-col gap-4 flex-1">
+  <h1 class="text-2xl font-bold">{{ titulo }}</h1>
+  <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
+    <input type="hidden" id="idcompra" name="idcompra" value="{{ compra.idcompra if compra else '' }}" />
+    {{ inputText(compra.data if compra, 'Data da Compra', 'Digite a data da compra', 'data', 'date') }}
+    <!--  -->
+    {{ inputText(compra.valor_pago if compra, 'Valor', 'Digite o valor pago', 'valor_pago', 'number', '0.01') }}
+    <!--  -->
+    {{ inputSelect(veiculos, compra.idplaca if compra else '', 'Placa do Veículo', 'idplaca', 'Selecione a placa', 'idplaca') }}
+    <!--  -->
+    {{ inputSelect(clientes, compra.idcliente if compra else '', 'Cliente', 'idcliente', 'Selecione o cliente', 'nome') }}
+    <!--  -->
+    {{ inputSelect(['Dinheiro', 'Cartão de Crédito', 'Cartão de Débito', 'Cheque'], compra.forma_pagamento if compra else '', 'Forma de Pagamento', 'forma_pagamento', 'Selecione a forma de pagamento') }}
+    <!--  -->
+    {{ formButtons() }}
+  </form>
+</div>
+<script>
+  document.querySelector("form").addEventListener("submit", function (event) {
+    const inputs = document.querySelectorAll('input[type="text"], select');
+    let isValid = true;
+
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        isValid = false;
+        input.classList.add("border-red-500");
+        input.classList.remove("border-gray-300");
+      } else {
+        input.classList.remove("border-red-500");
+        input.classList.add("border-gray-300");
+      }
+    });
+
+    if (!isValid) {
+      event.preventDefault();
+      alert("Por favor, preencha todos os campos corretamente.");
+    }
+  });
+</script>
+{% endblock %}
