@@ -2,16 +2,16 @@
 <div class="flex flex-col gap-4 flex-1">
   <h1 class="text-2xl font-bold">{{ titulo }}</h1>
   <form action="{{ action }}" method="POST" class="flex flex-col gap-4 flex-1">
-    <input type="hidden" id="iddespesa" name="iddespesa" value="{{ despesa.iddespesa if despesa else '' }}" />
-    {{ inputText(despesa.descricao if despesa, 'Descrição', 'Digite a descrição do serviço', 'descricao') }}
+    <input type="hidden" id="idcompra" name="idcompra" value="{{ compra.idcompra if compra else '' }}" />
+    {{ inputText(compra.data if compra else datetime, 'Data da Compra', 'Digite a data da compra', 'data', 'date') }}
     <!--  -->
-    {{ inputText(despesa.data_servico if despesa else datetime, 'Data do Serviço', 'Digite a data do serviço', 'data_servico', 'date') }}
+    {{ inputText(compra.valor_pago if compra, 'Valor', 'Digite o valor pago', 'valor_pago', 'number', '0.01') }}
     <!--  -->
-    {{ inputText(despesa.valor if despesa, 'Valor', 'Digite o valor', 'valor', 'number', '0.01') }}
+    {{ inputSelect(veiculos, compra.idplaca if compra else '', 'Placa do Veículo', 'idplaca', 'Selecione a placa', 'idplaca') }}
     <!--  -->
-    {{ inputSelect(veiculos, despesa.idplaca if despesa else '', 'Placa do Veículo', 'idplaca', 'Selecione a placa', 'idplaca') }}
+    {{ inputSelect(clientes, compra.idcliente if compra else '', 'Cliente', 'idcliente', 'Selecione o cliente', 'nome') }}
     <!--  -->
-    {{ inputSelect(prestadores, despesa.idprestador if despesa else '', 'Prestador', 'idprestador', 'Selecione o prestador', 'nome_empresa') }}
+    {{ inputSelect(['Dinheiro', 'Cartão de Crédito', 'Cartão de Débito', 'Cheque'], compra.forma_pagamento if compra else '', 'Forma de Pagamento', 'forma_pagamento', 'Selecione a forma de pagamento') }}
     <!--  -->
     {{ formButtons() }}
   </form>

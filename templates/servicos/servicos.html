@@ -10,7 +10,7 @@
 <!--  -->
 {% for item in array %}
 <!--  -->
-{{ tableRow(item.idprestador, [item.descricao, item.data_servico, item.idplaca, item.nome_empresa, item.valor], actionButtons( url_for('servicos.edit', iddespesa=item.iddespesa), url_for('servicos.delete', iddespesa=item.iddespesa) ) ) }}
+{{ tableRow(item.idprestador, [item.descricao, item.data_servico, item.idplaca, item.nome_empresa, 'R$ ' ~ item.formatted_valor], actionButtons( url_for('servicos.edit', iddespesa=item.iddespesa), url_for('servicos.delete', iddespesa=item.iddespesa) ) ) }}
 <!--  -->
 {% endfor %}
 <!--  -->

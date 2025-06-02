@@ -2,7 +2,7 @@
 <!--  Table Header  -->
 {% block TH %}
 <!--  -->
-{{ tableHeader(['Nome', 'Endereço', 'CEP']) }}
+{{ tableHeader(['Cliente', 'Data da Aquisição', 'Placa do Veículo', 'Valor']) }}
 <!--  -->
 {% endblock %}
 <!--  Table Row  -->
@@ -10,8 +10,7 @@
 <!--  -->
 {% for item in array %}
 <!--  -->
-{{ tableRow(item.idprestador, [item.nome_empresa, item.cidade ~ ' - ' ~ item.uf , item.cep], actionButtons(url_for('prestadores.edit', idprestador=item.idprestador) , url_for('prestadores.delete', idprestador=item.idprestador)) ) }}
-
+{{ tableRow(item.idcompra, [item.nome, item.data, item.idplaca, 'R$ ' ~ item.formatted_valor_pago], actionButtons( url_for('compras.edit', idcompra=item.idcompra), url_for('compras.delete', idcompra=item.idcompra) ) ) }}
 <!--  -->
 {% endfor %}
 <!--  -->
