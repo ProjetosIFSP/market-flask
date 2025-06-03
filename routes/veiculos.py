@@ -247,7 +247,8 @@ def details(idplaca):
         Despesa.idplaca,
         Despesa.idprestador,
         Prestador.nome_empresa.label('prestador_nome')
-    ).outerjoin(Prestador, Prestador.idprestador == Despesa.idprestador)
+    ).outerjoin(Prestador, Prestador.idprestador == Despesa.idprestador)\
+    .filter(Despesa.idplaca == idplaca)
 
     if not veiculo:
         flash('Veículo não encontrado!', 'error')
